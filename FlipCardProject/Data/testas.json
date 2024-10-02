@@ -1,0 +1,25 @@
+{
+  "title": "testas",
+  "mnemonics": [
+    {
+      "mnemonic": "Richard Of York Gave Battle In Vain",
+      "concept": "Red Orange Yellow Green Blue Indigo Violet"
+    },
+    {
+      "mnemonic": "My Very Educated Mother Just Served Us Noodles",
+      "concept": "Mercury Venus Earth Mars Jupiter Saturn Uranus Neptune"
+    },
+    {
+      "mnemonic": "Dear King Philip Came Over For Good Soup",
+      "concept": "Domain Kingdom Phylum Class Order Family Genus Species"
+    },
+    {
+      "mnemonic": "Please Excuse My Dear Aunt Sally",
+      "concept": "parentheses, exponents, multiplication, division, addition, subtraction"
+    },
+    {
+      "mnemonic": "Big brown rabbits often yield great big vocal groans when gingerly slapped",
+      "concept": "Black(0), Brown(1), Red(2), Orange(3), Yellow(4), Green(5), Blue(6), Violet(7), Gray(8), White(9), Gold(5%), Silver(10%), None(20%)"
+    }
+  ]
+}
