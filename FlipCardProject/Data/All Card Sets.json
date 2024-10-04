@@ -1,0 +1,79 @@
+﻿{
+  "AllCardSets": [
+    {
+      "title": "Trivia Questions",
+      "mnemonics": [
+        {
+          "mnemonic": "What is the capital of France?",
+          "concept": "Paris"
+        },
+        {
+          "mnemonic": "What color is the sky?",
+          "concept": "Blue"
+        },
+        {
+          "mnemonic": "What is the largest planet in our solar system?",
+          "concept": "Jupiter"
+        },
+        {
+          "mnemonic": "What element does O represent on the periodic table?",
+          "concept": "Oxygen"
+        },
+        {
+          "mnemonic": "What is the main ingredient in guacamole?",
+          "concept": "Avocado"
+        }
+      ]
+    },
+    {
+      "title": "Animal Facts",
+      "mnemonics": [
+        {
+          "mnemonic": "What is the fastest land animal?",
+          "concept": "Cheetah"
+        },
+        {
+          "mnemonic": "Which animal is known as the king of the jungle?",
+          "concept": "Lion"
+        },
+        {
+          "mnemonic": "What animal can change its color to blend in with its surroundings?",
+          "concept": "Chameleon"
+        },
+        {
+          "mnemonic": "Which mammal can fly?",
+          "concept": "Bat"
+        },
+        {
+          "mnemonic": "What is the tallest animal in the world?",
+          "concept": "Giraffe"
+        }
+      ]
+    },
+    {
+      "title": "Historical Events",
+      "mnemonics": [
+        {
+          "mnemonic": "In which year did World War II end?",
+          "concept": "1945"
+        },
+        {
+          "mnemonic": "Who was the first president of the United States?",
+          "concept": "George Washington"
+        },
+        {
+          "mnemonic": "Which civilization built the pyramids of Giza?",
+          "concept": "Ancient Egyptians"
+        },
+        {
+          "mnemonic": "In which year did the Titanic sink?",
+          "concept": "1912"
+        },
+        {
+          "mnemonic": "Who discovered penicillin?",
+          "concept": "Alexander Fleming"
+        }
+      ]
+    }
+  ]
+}
