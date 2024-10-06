@@ -9,7 +9,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b8ff5334-28f4-426b-9ab1-c49f562d17c1" name="Changes" comment="" />
+    <list default="true" id="b8ff5334-28f4-426b-9ab1-c49f562d17c1" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.FlipCardProject/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FlipCardProject/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.FlipCardProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FlipCardProject/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/config/applicationhost.config" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/config/applicationhost.config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FlipCardProject/Controllers/Home.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FlipCardProject/Controllers/Home.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FlipCardProject/Data/Serialization.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FlipCardProject/Data/Serialization.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FlipCardProject/Data/trivia.json" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,10 +28,10 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 4
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 4
+}</component>
   <component name="ProjectId" id="2mtLyOgHyrijhUrqDqKzoe3aMo8" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -34,8 +41,9 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     ".NET Launch Settings Profile.FlipCardProject: IIS Express.executor": "Run",
+    ".NET Project.test.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "question",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -90,6 +98,11 @@
         <option name="Build" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue=".NET Launch Settings Profile.FlipCardProject: http" />
+      <item itemvalue=".NET Launch Settings Profile.FlipCardProject: https" />
+      <item itemvalue=".NET Launch Settings Profile.FlipCardProject: IIS Express" />
+    </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -100,6 +113,8 @@
       <option name="presentableId" value="Default" />
       <updated>1727891179680</updated>
       <workItem from="1727891181333" duration="3757000" />
+      <workItem from="1728208331824" duration="35000" />
+      <workItem from="1728208430078" duration="3032000" />
     </task>
     <servers />
   </component>
