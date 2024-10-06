@@ -21,16 +21,8 @@ namespace FlipCardProject.Controllers
 
             // Initialize the first FlipcardSet
             FlipcardSet test = new FlipcardSet("testas");
-            Serialization s = new Serialization(test, "testas");
-            s.LoadData();
-            _CardSet.Add(test);
-
-            // Initialize the second FlipcardSet
-            FlipcardSet test2 = new FlipcardSet("test2");
-            test2.AddFlipcard(new FlipcardState(), "question","blabla", "b");
-            test2.AddFlipcard(new FlipcardState(), "question","whateverrr", "whtv");
-            test2.AddFlipcard(new FlipcardState(),"question", "lets gooo", "last goat");
-            _CardSet.Add(test2);
+            Serialization s = new Serialization();
+            s.LoadData(_CardSet);
         }
         
         
