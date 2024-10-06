@@ -18,9 +18,6 @@ namespace FlipCardProject.Controllers
         static Home()
         {
             _CardSet = new List<FlipcardSet>();
-
-            // Initialize the first FlipcardSet
-            FlipcardSet test = new FlipcardSet("testas");
             Serialization s = new Serialization();
             s.LoadData(_CardSet);
         }
