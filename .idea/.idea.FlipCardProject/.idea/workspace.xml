@@ -10,12 +10,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b8ff5334-28f4-426b-9ab1-c49f562d17c1" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.FlipCardProject/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FlipCardProject/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FlipCardProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FlipCardProject/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/config/applicationhost.config" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/config/applicationhost.config" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FlipCardProject/Controllers/Home.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FlipCardProject/Controllers/Home.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FlipCardProject/Data/Serialization.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FlipCardProject/Data/Serialization.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FlipCardProject/Data/trivia.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/FlipCard.css" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/FlipCard.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/FlipCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/FlipCard.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,20 +39,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Launch Settings Profile.FlipCardProject: IIS Express.executor": "Run",
-    ".NET Project.test.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "question",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Launch Settings Profile.FlipCardProject: IIS Express.executor&quot;: &quot;Run&quot;,
+    &quot;.NET Project.test.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;4-saule--frontend-for-flipcard-sets&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected=".NET Launch Settings Profile.FlipCardProject: IIS Express">
     <configuration name="FlipCardProject: IIS Express" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/FlipCardProject/FlipCardProject.csproj" />
@@ -115,6 +117,15 @@
       <workItem from="1727891181333" duration="3757000" />
       <workItem from="1728208331824" duration="35000" />
       <workItem from="1728208430078" duration="3032000" />
+      <workItem from="1728244157235" duration="926000" />
+      <workItem from="1728245312857" duration="11000" />
+      <workItem from="1728248652564" duration="694000" />
+      <workItem from="1728292351345" duration="709000" />
+      <workItem from="1728293207324" duration="6011000" />
+      <workItem from="1728306309958" duration="294000" />
+      <workItem from="1728310372509" duration="438000" />
+      <workItem from="1728372702260" duration="221000" />
+      <workItem from="1728384943335" duration="4926000" />
     </task>
     <servers />
   </component>
