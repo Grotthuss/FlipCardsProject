@@ -46,44 +46,124 @@ namespace FlipCardProject.Controllers
         [HttpPost]
         public ActionResult<FlipcardSet> Post([FromBody] FlipcardSetDto newSet)
         {
-            _CardSet.Add(new FlipcardSet(newSet));
-
+            
+            var set = _CardSet.FirstOrDefault(f => f.SetName == newSet.SetName);
+            if (set == null)
+            {
+                newSet.FlipcardsList.Sort((x,y) => x.Id.CompareTo(y.Id));
+                for (int i = 0; i < newSet.FlipcardsList.Count; i++)
+                {
+                    Flipcard t = newSet.FlipcardsList[i];
+                    t.Id = i + 1;
+                    newSet.FlipcardsList[i] = t;
+                }
+                
+                _CardSet.Add(new FlipcardSet(newSet));
+                
+            }
+            else
+            {
+                return Conflict();
+            }
+            
             
             return CreatedAtAction(nameof(GetSet), new { setName = newSet.SetName }, newSet);
         }
 
-        
-        
-        
-        [HttpPut]
-        public ActionResult Put([FromBody] FlipcardSetDto updatedSet)
-        {   
-            
-            var set = _CardSet.FirstOrDefault(f => f.SetName == updatedSet.SetName);
+
+        [HttpPost("{setName}", Name = "PostSet")]
+        public ActionResult<FlipcardSet> PostSet(string setName)
+        {
+            var set = _CardSet.FirstOrDefault(f => f.SetName == setName);
+
             if (set == null)
             {
-                return NotFound();
+                _CardSet.Add(new FlipcardSet(setName));
+                return Ok();
             }
-
-            set.SetName = updatedSet.SetName;
-            set.FlipcardsList = updatedSet.FlipcardsList;
-            return NoContent();
+            else
+            {
+                return Conflict();
+            }
+            
         }
-        
-        [HttpPut("{setName},{question},{concept},{mnemonic}", Name = "AddCard")]
-        public ActionResult<FlipcardSet> Put(string setName, string question,string concept, string mnemonic)
+
+        [HttpPost("{setName}/CreateCard", Name = "PostCard")]
+        public ActionResult<FlipcardSet> PostCard(string setName, [FromBody] Flipcard card)
         {
             var set = _CardSet.FirstOrDefault(f => f.SetName == setName);
             if (set == null)
             {
-                return NotFound();
+                return Conflict();
             }
-            set.AddFlipcard(new FlipcardState(),question, concept, mnemonic);
+            else
+            {
+                if (!set.FlipcardsList.Contains(card))
+                {
+                    set.AddFlipcard(card.State,card.Question,card.Concept,card.Mnemonic);
+                    
+                }
+
+                return Ok();
+            }
+        }
+        
+        
+        
+        [HttpPut]
+        public ActionResult<FlipcardSet> PutWholeSet([FromBody] FlipcardSetDto updatedSet)
+        {   
+            
+            updatedSet.FlipcardsList.Sort((x,y) => x.Id.CompareTo(y.Id));
+            for (int i = 0; i < updatedSet.FlipcardsList.Count; i++)
+            {
+                Flipcard t = updatedSet.FlipcardsList[i];
+                t.Id = i + 1;
+                updatedSet.FlipcardsList[i] = t;
+            }
+            
+            var set = _CardSet.FirstOrDefault(f => f.SetName == updatedSet.SetName);
+            if (set == null)
+            {
+                FlipcardSet newSet = new FlipcardSet(updatedSet);
+                _CardSet.Add(newSet);   
+            }
+            else
+            {
+                set.FlipcardsList = updatedSet.FlipcardsList;
+            }
+
+            return Ok();
+
+        }
+        
+        [HttpPut("{setName}", Name = "UpdateOrAddCard")]
+        public ActionResult<FlipcardSet> PutCard(string setName, [FromBody] Flipcard updatedCard)
+        {   
+            
+            var set = _CardSet.FirstOrDefault(f => f.SetName == setName);
+            if (set == null)
+            {
+                return NotFound();
+                
+            }
+
+            var card = set.FlipcardsList.FirstOrDefault(f => f.Id == updatedCard.Id);
+            if (card.Equals(default(Flipcard)))
+            {
+                set.AddFlipcard(updatedCard.State,updatedCard.Question,updatedCard.Concept,updatedCard.Mnemonic);
+            }
+            else
+            {
+                set.FlipcardsList[updatedCard.Id - 1 ] = updatedCard;
+                
+            }
             return NoContent();
+            
         }
         
         [HttpDelete("{setName}")]
-        public ActionResult Delete(string setName)
+        public ActionResult DeleteSet(string setName)
         {
             var set = _CardSet.FirstOrDefault(f => f.SetName == setName);
             if (set == null)
