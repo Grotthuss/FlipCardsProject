@@ -4,7 +4,7 @@ using System;
 using FlipCardProject.Enums;
 using FlipCardProject.Records;
 
-public struct Flipcard
+public struct Flipcard : IEquatable<Flipcard>
 {
     private int _id;
     private string _concept;
@@ -49,8 +49,20 @@ public struct Flipcard
         _state = state;
     }
 
-    public Flipcard()
+    
+    public bool Equals(Flipcard other)
     {
-        _id = -1;
+        return _mnemonic == other._mnemonic &&
+               _state == other._state &&
+               _question == other._question &&
+               _concept == other._concept;
+    }
+    public override bool Equals(object obj)
+    {
+        if (obj is Flipcard)
+        {
+            return Equals((Flipcard)obj);
+        }
+        return false;
     }
 }
