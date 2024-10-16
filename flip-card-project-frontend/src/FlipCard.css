@@ -102,3 +102,16 @@ button {
 button:hover {
     background-color: #21867a;
 }
+
+.input-container {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.input-container input {
+    font-size: 18px;
+    width: 600px;
+    padding: 10px;
+    border-radius: 200px;
+    border: 2px solid #ccc;
+}

@@ -1,12 +1,19 @@
 import React from 'react';
 import './FlipCard.css';
 import { useParams } from 'react-router-dom';
+import { ErrorTypes } from './errorEnums';
 
+enum State{
+    UNANSWERED,
+    ANSWERED,
+    INCORRECT
+}
 interface FlipCardData {
     Id: number;
     Question: string;
     Concept: string;
     Mnemonic: string;
+    State: State;
 }
 
 const FlipCard: React.FC = () => {
@@ -14,6 +21,21 @@ const FlipCard: React.FC = () => {
     const [cards, setCards] = React.useState<FlipCardData[]>([]);
     const [loading, setLoading] = React.useState<boolean>(true);
     const [error, setError] = React.useState<string | null>(null);
+    const [inputValue, setInputValue] = React.useState('');
+
+    const flipAnsweredCard = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setInputValue(event.target.value);
+
+        const updatedCards = [...cards];
+
+        updatedCards.forEach(card => {
+            if (card.Concept.toLowerCase() === event.target.value.toLowerCase()) {
+                card.State = State.ANSWERED;
+                handleFlip(card.Id);
+            }
+        });
+        setCards(updatedCards);
+    };
 
     const handleFlip = (id: number) => {
         const flipCard = document.getElementById(`flipCard-${id}`);
@@ -25,15 +47,15 @@ const FlipCard: React.FC = () => {
     React.useEffect(() => {
         const fetchCards = async () => {
             if (!title) {
-                setError('Set title is undefined. Please check your URL.');
+                setError(ErrorTypes.TITLE);
                 setLoading(false);
                 return;
             }
             try {
-                const response = await fetch(`https://localhost:44372/api/Home/${title}`);
+                const response = await fetch(`https://localhost:7146/api/Home/${title}`);
 
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error(ErrorTypes.NETWORK);
                 }
 
                 const data = await response.json();
@@ -41,10 +63,10 @@ const FlipCard: React.FC = () => {
                 if (data && Array.isArray(data._flipcards_list)) {
                     setCards(data._flipcards_list);
                 } else {
-                    setError("Unexpected response format: " + JSON.stringify(data));
+                    setError(ErrorTypes.FORMAT + JSON.stringify(data));
                 }
             } catch (error) {
-                setError('Error fetching cards: ' + (error as Error).message);
+                setError(ErrorTypes.CARDS + (error as Error).message);
             } finally {
                 setLoading(false);
             }
@@ -66,27 +88,38 @@ const FlipCard: React.FC = () => {
     }
 
     return (
-        <div className="container">
-            {cards.map((card) => (
-                <div
-                    className="flip-card"
-                    key={card.Id}
-                    id={`flipCard-${card.Id}`}
-                    onClick={() => handleFlip(card.Id)}
-                >
-                    <div className="flip-card-inner">
-                        <div className="flip-card-front">
-                            <p className="card-question">{card.Question}</p>
-                            <h2>{card.Mnemonic}</h2>
-                        </div>
-                        <div className="flip-card-back">
-                            <h2>{card.Concept}</h2>
+        <div>
+            <div className="container">
+                {cards.map((card) => (
+                    <div
+                        className="flip-card"
+                        key={card.Id}
+                        id={`flipCard-${card.Id}`}
+                        onClick={() => handleFlip(card.Id)}
+                    >
+                        <div className="flip-card-inner">
+                            <div className="flip-card-front">
+                                <p className="card-question">{card.Question}</p>
+                                <h2>{card.Mnemonic}</h2>
+                            </div>
+                            <div className="flip-card-back">
+                                <h2>{card.Concept}</h2>
+                            </div>
                         </div>
                     </div>
-                </div>
-            ))}
+                ))}
+            </div>
+            <div className="input-container">
+                <input
+                    type="text"
+                    placeholder="Type any concept..."
+                    value={inputValue}
+                    onChange={flipAnsweredCard}
+                />
+            </div>
         </div>
     );
+
 };
 
 export default FlipCard;

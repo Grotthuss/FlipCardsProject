@@ -1,12 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './CardSetSelection.css';
+import { ErrorTypes } from './errorEnums';
 
+enum State{
+    UNANSWERED,
+    ANSWERED,
+    INCORRECT
+}
 interface CardAttribute {
     Id: number;
     Question: string;
     Concept: string;
     Mnemonic: string;
+    State: State;
 }
 
 interface CardSet {
@@ -22,14 +29,14 @@ const CardSetSelection: React.FC = () => {
     React.useEffect(() => {
         const fetchCardSets = async () => {
             try {
-                const response = await fetch('https://localhost:44372/api/Home');
+                const response = await fetch('https://localhost:7146/api/Home');
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error(ErrorTypes.NETWORK);
                 }
                 const data = await response.json();
                 setCardSets(data);
             } catch (error) {
-                setError('Error fetching card sets: ' + (error as Error).message);
+                setError(ErrorTypes.SETS + (error as Error).message);
             } finally {
                 setLoading(false);
             }
