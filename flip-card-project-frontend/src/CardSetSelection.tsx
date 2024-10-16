@@ -1,19 +1,13 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './CardSetSelection.css';
-import { ErrorTypes } from './errorEnums';
+import AddCardSet from './AddCardSet';
 
-enum State{
-    UNANSWERED,
-    ANSWERED,
-    INCORRECT
-}
 interface CardAttribute {
     Id: number;
     Question: string;
     Concept: string;
     Mnemonic: string;
-    State: State;
 }
 
 interface CardSet {
@@ -22,21 +16,21 @@ interface CardSet {
 }
 
 const CardSetSelection: React.FC = () => {
-    const [cardSets, setCardSets] = React.useState<CardSet[]>([]);
-    const [loading, setLoading] = React.useState<boolean>(true);
-    const [error, setError] = React.useState<string | null>(null);
+    const [cardSets, setCardSets] = useState<CardSet[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
-    React.useEffect(() => {
+    useEffect(() => {
         const fetchCardSets = async () => {
             try {
-                const response = await fetch('https://localhost:7146/api/Home');
+                const response = await fetch('https://localhost:44372/api/Home');
                 if (!response.ok) {
-                    throw new Error(ErrorTypes.NETWORK);
+                    throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
                 setCardSets(data);
             } catch (error) {
-                setError(ErrorTypes.SETS + (error as Error).message);
+                setError('Error fetching card sets: ' + (error as Error).message);
             } finally {
                 setLoading(false);
             }
@@ -44,6 +38,14 @@ const CardSetSelection: React.FC = () => {
 
         fetchCardSets();
     }, []);
+
+    const handleAddCardSet = (setName: string) => {
+        const newCardSet: CardSet = {
+            _set_name: setName,
+            _flipcards_list: [],
+        };
+        setCardSets([...cardSets, newCardSet]);
+    };
 
     if (loading) {
         return <div>Loading...</div>;
@@ -54,20 +56,26 @@ const CardSetSelection: React.FC = () => {
     }
 
     return (
-        <div className="card-set-selection">
-            {Array.isArray(cardSets) && cardSets.length > 0 ? (
-                cardSets.map((cardSet, index) => (
-                    <div key={index} className="card-set">
-                        <Link to={`/card-set/${cardSet._set_name}`}>
-                            <div className="card">
-                                <h2>{cardSet._set_name}</h2>
-                            </div>
-                        </Link>
-                    </div>
-                ))
-            ) : (
-                <div>No card sets available</div>
-            )}
+        <div className="card-set-selection-container">
+            <div className="card-set-list">
+                {Array.isArray(cardSets) && cardSets.length > 0 ? (
+                    cardSets.map((cardSet, index) => (
+                        <div key={index} className="card-set">
+                            <Link to={`/card-set/${cardSet._set_name}`}>
+                                <div className="card">
+                                    <h2>{cardSet._set_name}</h2>
+                                </div>
+                            </Link>
+                        </div>
+                    ))
+                ) : (
+                    <div>No card sets available</div>
+                )}
+            </div>
+
+            <div className="add-card-set-form">
+                <AddCardSet onAdd={handleAddCardSet} />
+            </div>
         </div>
     );
 };

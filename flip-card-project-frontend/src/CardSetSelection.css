@@ -1,10 +1,18 @@
-.card-set-selection {
+.card-set-selection-container {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
+}
+
+.card-set-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 40px;
 }
 
 .card-set {
@@ -33,4 +41,11 @@
 .card-set h2 {
     font-size: 20px;
     margin: 0;
+}
+
+.add-card-set-form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
 }
