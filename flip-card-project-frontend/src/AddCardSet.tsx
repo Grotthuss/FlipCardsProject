@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './AddCardSet.css';
+import './errorEnums.ts';
+import {Errors} from "./errorEnums";
 
 interface AddCardSetProps {
     onAdd: (setName: string) => void;
@@ -14,7 +16,7 @@ const AddCardSet: React.FC<AddCardSetProps> = ({ onAdd }) => {
         setError(null);
 
         if (!setName) {
-            setError('Please enter a valid set name.');
+            setError(Errors.NAME);
             return;
         }
 
@@ -28,13 +30,13 @@ const AddCardSet: React.FC<AddCardSetProps> = ({ onAdd }) => {
             });
 
             if (!response.ok) {
-                throw new Error('Failed to create card set');
+                throw new Error(Errors.CREATE_SET);
             }
 
             onAdd(setName);
             setSetName('');
         } catch (err) {
-            setError('Error creating card set: ' + (err as Error).message);
+            setError(Errors.CREATE_SET + (err as Error).message);
         }
     };
 

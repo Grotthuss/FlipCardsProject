@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './CardSetSelection.css';
 import AddCardSet from './AddCardSet';
+import {Errors} from "./errorEnums";
 
 interface CardAttribute {
     Id: number;
@@ -25,12 +26,12 @@ const CardSetSelection: React.FC = () => {
             try {
                 const response = await fetch('https://localhost:44372/api/Home');
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error(Errors.NETWORK);
                 }
                 const data = await response.json();
                 setCardSets(data);
             } catch (error) {
-                setError('Error fetching card sets: ' + (error as Error).message);
+                setError(Errors.SETS + (error as Error).message);
             } finally {
                 setLoading(false);
             }
