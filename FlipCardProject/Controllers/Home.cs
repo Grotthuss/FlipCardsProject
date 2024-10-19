@@ -13,7 +13,7 @@ namespace FlipCardProject.Controllers
     [ApiController]
     public class Home : ControllerBase
     {
-        public static List<FlipcardSet> _CardSet;
+        private static List<FlipcardSet> _CardSet;
 
         static Home()
         {
