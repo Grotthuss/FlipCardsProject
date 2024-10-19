@@ -4,7 +4,7 @@ using FlipCardProject.Records;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using FlipCardProject.Data;
-
+using FlipCardProject.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 namespace FlipCardProject.Controllers
@@ -13,7 +13,7 @@ namespace FlipCardProject.Controllers
     [ApiController]
     public class Home : ControllerBase
     {
-        private static List<FlipcardSet> _CardSet;
+        public static List<FlipcardSet> _CardSet;
 
         static Home()
         {
@@ -24,14 +24,14 @@ namespace FlipCardProject.Controllers
         
         
         // GET: api/<Home>
-        [HttpGet]
+        [HttpGet("GetAllSets")]
         public IActionResult Get()
         {
             return Content(JsonConvert.SerializeObject(_CardSet), "application/json");
         }
         
         
-        [HttpGet("{setName}", Name = "GetCardSet")]
+        [HttpGet("{setName}/GetCardSet", Name = "GetCardSet")]
         public ActionResult<FlipcardSet> GetSet(string setName)
         {
             var set = _CardSet.FirstOrDefault(f => f.SetName == setName);
@@ -41,9 +41,39 @@ namespace FlipCardProject.Controllers
             }
             return Content(JsonConvert.SerializeObject(set),"application/json");
         }
+
+        [HttpGet("{setName}/CardsOfSomeState")]
+        public ActionResult<List<Flipcard>> GetCardsOfSomeState(string setName,  [FromQuery]  FlipcardState state)
+        {
+            var set = _CardSet.FirstOrDefault(f => f.SetName == setName);
+            if (set == null)
+            {
+                return NotFound();
+            }
+            
+            var card = set.FlipcardsList.Where(f => f.State == state).ToList();
+            if (card.Count == 0)
+            {
+                return NotFound();
+            }
+            return Content(JsonConvert.SerializeObject(card), "application/json");
+        }
+
+        [HttpPut("{setName}/ShuffleCards")]
+        public ActionResult<List<Flipcard>> PutShuffleCards(string setName)
+        {
+            var set = _CardSet.FirstOrDefault(f => f.SetName == setName);
+            if (set == null)
+            {
+                return NotFound();
+            }
+            
+            set.CardShuffle();
+            return Ok();
+            
+        }
         
-        
-        [HttpPost]
+        [HttpPost("CreateFullSet")]
         public ActionResult<FlipcardSet> Post([FromBody] FlipcardSetDto newSet)
         {
             
@@ -71,7 +101,7 @@ namespace FlipCardProject.Controllers
         }
 
 
-        [HttpPost("{setName}", Name = "PostSet")]
+        [HttpPost("{setName}/CreateEmptySet", Name = "PostSet")]
         public ActionResult<FlipcardSet> PostSet(string setName)
         {
             var set = _CardSet.FirstOrDefault(f => f.SetName == setName);
@@ -110,7 +140,7 @@ namespace FlipCardProject.Controllers
         
         
         
-        [HttpPut]
+        [HttpPut("UpdateSet")]
         public ActionResult<FlipcardSet> PutWholeSet([FromBody] FlipcardSetDto updatedSet)
         {   
             
@@ -137,7 +167,7 @@ namespace FlipCardProject.Controllers
 
         }
         
-        [HttpPut("{setName}", Name = "UpdateOrAddCard")]
+        [HttpPut("{setName}/UpdateOrAddCard", Name = "UpdateOrAddCard")]
         public ActionResult<FlipcardSet> PutCard(string setName, [FromBody] Flipcard updatedCard)
         {   
             
@@ -158,11 +188,11 @@ namespace FlipCardProject.Controllers
                 set.FlipcardsList[updatedCard.Id - 1 ] = updatedCard;
                 
             }
-            return NoContent();
+            return Ok();
             
         }
         
-        [HttpDelete("{setName}")]
+        [HttpDelete("{setName}/DeleteSet")]
         public ActionResult DeleteSet(string setName)
         {
             var set = _CardSet.FirstOrDefault(f => f.SetName == setName);
@@ -172,10 +202,10 @@ namespace FlipCardProject.Controllers
             }
 
             _CardSet.Remove(set);
-            return NoContent();
+            return Ok();
         }
 
-        [HttpDelete("{setName}/{Id}", Name = "DeleteCard")]
+        [HttpDelete("{setName}/{Id}/DeleteCard", Name = "DeleteCard")]
         public ActionResult<FlipcardSet> DeleteCard(string setName,int Id)
         {
             var set = _CardSet.FirstOrDefault(f => f.SetName == setName);
@@ -195,7 +225,7 @@ namespace FlipCardProject.Controllers
                     set.FlipcardsList[i] = t1;
                 }
                 set.FlipcardsList.Remove(set.FlipcardsList[Id - 1]);
-                return NoContent();
+                return Ok();
             }
             return NotFound();
             
