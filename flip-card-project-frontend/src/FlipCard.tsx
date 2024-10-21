@@ -2,6 +2,7 @@ import React from 'react';
 import './FlipCard.css';
 import AddFlipCard from "./AddFlipcard";
 import { useParams } from 'react-router-dom';
+import {Errors} from "./errorEnums";
 
 interface FlipCardData {
     Question: string;
@@ -14,6 +15,20 @@ const FlipCard: React.FC = () => {
     const [cards, setCards] = React.useState<FlipCardData[]>([]);
     const [loading, setLoading] = React.useState<boolean>(true);
     const [error, setError] = React.useState<string | null>(null);
+    const [inputValue, setInputValue] = React.useState('');
+
+    const flipAnsweredCard = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setInputValue(event.target.value);
+
+        const updatedCards = [...cards];
+
+        updatedCards.forEach((card, index) => {
+            if (card.Concept.toLowerCase() === event.target.value.toLowerCase()) {
+                handleFlip(index);
+            }
+        });
+        setCards(updatedCards);
+    };
 
     const handleFlip = (index: number) => {
         const flipCard = document.getElementById(`flipCard-${index}`);
@@ -25,23 +40,23 @@ const FlipCard: React.FC = () => {
     React.useEffect(() => {
         const fetchCards = async () => {
             if (!title) {
-                setError('Set title is undefined. Please check your URL.');
+                setError(Errors.TITLE);
                 setLoading(false);
                 return;
             }
             try {
                 const response = await fetch(`https://localhost:44372/api/Home/${title}`);
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error(Errors.NETWORK);
                 }
                 const data = await response.json();
                 if (data && Array.isArray(data._flipcards_list)) {
                     setCards(data._flipcards_list);
                 } else {
-                    setError("Unexpected response format: " + JSON.stringify(data));
+                    setError(Errors.FORMAT + JSON.stringify(data));
                 }
             } catch (error) {
-                setError('Error fetching cards: ' + (error as Error).message);
+                setError(Errors.CARDS + (error as Error).message);
             } finally {
                 setLoading(false);
             }
@@ -69,14 +84,14 @@ const FlipCard: React.FC = () => {
 
             if (!response.ok) {
                 const errorMessage = await response.text();
-                throw new Error(`Failed to add new flip card. Server response: ${errorMessage}`);
+                throw new Error(`${Errors.CARD} Server response: ${errorMessage}`);
             }
 
             setCards((prevCards) => [...prevCards, newCard]);
             setError(null);
 
         } catch (err) {
-            setError('Error adding card: ' + (err as Error).message);
+            setError(Errors.CARD + (err as Error).message);
         }
     };
 
@@ -114,9 +129,18 @@ const FlipCard: React.FC = () => {
                     <div>No cards available</div>
                 )}
             </div>
+            <div className="input-container">
+                <input
+                    type="text"
+                    placeholder="Guess any concept..."
+                    value={inputValue}
+                    onChange={flipAnsweredCard}
+                />
+            </div>
             <AddFlipCard onAddFlipCard={handleAddFlipCard} />
         </div>
     );
+
 };
 
 export default FlipCard;
