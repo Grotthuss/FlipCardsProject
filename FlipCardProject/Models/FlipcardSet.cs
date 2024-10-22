@@ -54,7 +54,10 @@ public class FlipcardSet : IEnumerable<Flipcard>
     {
 
         Flipcard flipcard = new Flipcard(question:question,concept: concept, mnemonic: mnemonic, state: state);
-        flipcard.Id = _flipcards_list.Count + 1;
+        
+        object cardId = _flipcards_list.Count + 1;
+        flipcard.Id = (int)cardId;
+
         _flipcards_list.Add(flipcard);
     }
 }
