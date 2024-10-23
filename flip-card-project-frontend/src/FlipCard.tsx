@@ -1,8 +1,8 @@
 import React from 'react';
 import './FlipCard.css';
 import AddFlipCard from "./AddFlipcard";
-import { useParams } from 'react-router-dom';
-import {Errors} from "./errorEnums";
+import { useParams, useNavigate } from 'react-router-dom';
+import { Errors } from "./errorEnums";
 
 interface FlipCardData {
     Question: string;
@@ -12,14 +12,31 @@ interface FlipCardData {
 
 const FlipCard: React.FC = () => {
     const { title } = useParams<{ title: string }>();
+    const navigate = useNavigate();
     const [cards, setCards] = React.useState<FlipCardData[]>([]);
     const [loading, setLoading] = React.useState<boolean>(true);
     const [error, setError] = React.useState<string | null>(null);
     const [inputValue, setInputValue] = React.useState('');
 
+    const shuffleCards = async () => {
+        try {
+            const response = await fetch(`https://localhost:44372/api/Home/${title}/ShuffleCards`, {
+                method: 'PUT',
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to shuffle cards.');
+            }
+
+            fetchCards();
+        } catch (error) {
+            setError(`Shuffle Error: ${(error as Error).message}`);
+        }
+    };
+
+
     const flipAnsweredCard = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInputValue(event.target.value);
-
         const updatedCards = [...cards];
 
         updatedCards.forEach((card, index) => {
@@ -37,31 +54,31 @@ const FlipCard: React.FC = () => {
         }
     };
 
-    React.useEffect(() => {
-        const fetchCards = async () => {
-            if (!title) {
-                setError(Errors.TITLE);
-                setLoading(false);
-                return;
+    const fetchCards = async () => {
+        if (!title) {
+            setError(Errors.TITLE);
+            setLoading(false);
+            return;
+        }
+        try {
+            const response = await fetch(`https://localhost:44372/api/Home/${title}/GetCardSet`);
+            if (!response.ok) {
+                throw new Error(Errors.NETWORK);
             }
-            try {
-                const response = await fetch(`https://localhost:44372/api/Home/${title}`);
-                if (!response.ok) {
-                    throw new Error(Errors.NETWORK);
-                }
-                const data = await response.json();
-                if (data && Array.isArray(data._flipcards_list)) {
-                    setCards(data._flipcards_list);
-                } else {
-                    setError(Errors.FORMAT + JSON.stringify(data));
-                }
-            } catch (error) {
-                setError(Errors.CARDS + (error as Error).message);
-            } finally {
-                setLoading(false);
+            const data = await response.json();
+            if (data && Array.isArray(data._flipcards_list)) {
+                setCards(data._flipcards_list);
+            } else {
+                setError(Errors.FORMAT + JSON.stringify(data));
             }
-        };
+        } catch (error) {
+            setError(Errors.CARDS + (error as Error).message);
+        } finally {
+            setLoading(false);
+        }
+    };
 
+    React.useEffect(() => {
         fetchCards();
     }, [title]);
 
@@ -93,6 +110,10 @@ const FlipCard: React.FC = () => {
         } catch (err) {
             setError(Errors.CARD + (err as Error).message);
         }
+    };
+
+    const goToQuiz = () => {
+        navigate(`/quizcard/${title}`, { state: { cards } });
     };
 
     if (loading) {
@@ -129,18 +150,13 @@ const FlipCard: React.FC = () => {
                     <div>No cards available</div>
                 )}
             </div>
-            <div className="input-container">
-                <input
-                    type="text"
-                    placeholder="Guess any concept..."
-                    value={inputValue}
-                    onChange={flipAnsweredCard}
-                />
-            </div>
             <AddFlipCard onAddFlipCard={handleAddFlipCard} />
+
+            <button onClick={shuffleCards} className="shuffle-button">Shuffle Cards</button>
+
+            <button onClick={goToQuiz}>Go to Quiz</button>
         </div>
     );
-
 };
 
 export default FlipCard;
