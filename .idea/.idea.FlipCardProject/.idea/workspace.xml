@@ -11,10 +11,8 @@
   <component name="ChangeListManager">
     <list default="true" id="b8ff5334-28f4-426b-9ab1-c49f562d17c1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FlipCardProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FlipCardProject/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/AddCardSet.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/AddCardSet.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/CardSetSelection.css" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/CardSetSelection.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/CardSetSelection.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/CardSetSelection.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/FlipCard.css" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/FlipCard.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/FlipCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/FlipCard.tsx" afterDir="false" />
@@ -40,21 +38,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Launch Settings Profile.FlipCardProject: IIS Express.executor": "Run",
-    ".NET Project.test.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "6-saule-create-new-card-sets",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Launch Settings Profile.FlipCardProject: IIS Express.executor&quot;: &quot;Run&quot;,
+    &quot;.NET Project.test.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;12-saule--implement-flipcard-quiz-feature&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected=".NET Launch Settings Profile.FlipCardProject: IIS Express">
     <configuration name="FlipCardProject: IIS Express" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/FlipCardProject/FlipCardProject.csproj" />
@@ -129,6 +127,9 @@
       <workItem from="1728384943335" duration="4926000" />
       <workItem from="1729080988494" duration="74000" />
       <workItem from="1729082267170" duration="185000" />
+      <workItem from="1729501384858" duration="233000" />
+      <workItem from="1729522318094" duration="4760000" />
+      <workItem from="1729540224565" duration="501000" />
     </task>
     <servers />
   </component>

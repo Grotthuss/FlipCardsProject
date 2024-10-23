@@ -24,7 +24,7 @@ const CardSetSelection: React.FC = () => {
     useEffect(() => {
         const fetchCardSets = async () => {
             try {
-                const response = await fetch('https://localhost:44372/api/Home');
+                const response = await fetch('https://localhost:44372/api/Home/GetAllSets');
                 if (!response.ok) {
                     throw new Error(Errors.NETWORK);
                 }
