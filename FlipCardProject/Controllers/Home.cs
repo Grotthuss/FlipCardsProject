@@ -87,8 +87,12 @@ namespace FlipCardProject.Controllers
                     t.Id = i + 1;
                     newSet.FlipcardsList[i] = t;
                 }
+
+                FlipcardSet temp = new FlipcardSet();
+                temp.FromDtoToCardSet(newSet);
                 
-                _CardSet.Add(new FlipcardSet(newSet));
+                //_CardSet.Add((new FlipcardSet(newSet)).FromDtoToCardSet(newSet));
+                _CardSet.Add(temp);
                 
             }
             else
@@ -155,7 +159,9 @@ namespace FlipCardProject.Controllers
             var set = _CardSet.FirstOrDefault(f => f.SetName == updatedSet.SetName);
             if (set == null)
             {
-                FlipcardSet newSet = new FlipcardSet(updatedSet);
+                FlipcardSet newSet = new FlipcardSet();
+                newSet.FromDtoToCardSet(updatedSet);
+                //FlipcardSet newSet = new FlipcardSet(updatedSet);
                 _CardSet.Add(newSet);   
             }
             else

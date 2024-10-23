@@ -18,4 +18,13 @@ static public class Extension
                 set.FlipcardsList[j] = temp;
             }
         }
+        
+        public static void FromDtoToCardSet(this FlipcardSet set, FlipcardSetDto dtoSet)
+        {
+            set.FlipcardsList = dtoSet.FlipcardsList;
+            set.SetName = dtoSet.SetName;
+        }
+        
+        
+        
 }

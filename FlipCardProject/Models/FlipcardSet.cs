@@ -57,6 +57,12 @@ public class FlipcardSet : IEnumerable<Flipcard>
         flipcard.Id = _flipcards_list.Count + 1;
         _flipcards_list.Add(flipcard);
     }
+
+    public FlipcardSet()
+    {
+        
+    }
+    
 }
 
 public class FlipcardSetDto
