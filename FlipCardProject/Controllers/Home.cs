@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using FlipCardProject.Data;
 using FlipCardProject.Extensions;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 namespace FlipCardProject.Controllers
@@ -14,220 +15,320 @@ namespace FlipCardProject.Controllers
     public class Home : ControllerBase
     {
         private static List<FlipcardSet> _CardSet;
-
-        static Home()
+        private readonly DataContext _context;
+        public Home(DataContext context)
         {
             _CardSet = new List<FlipcardSet>();
             Serialization s = new Serialization();
             s.LoadData(_CardSet);
+            _context = context;
         }
-        
-        
-        // GET: api/<Home>
+
         [HttpGet("GetAllSets")]
-        public IActionResult Get()
+        public async Task<ActionResult<IEnumerable<FlipcardSet>>> GetCardSets()
         {
-            return Content(JsonConvert.SerializeObject(_CardSet), "application/json");
+            var sets = await _context.sets.ToListAsync();
+            return Ok(sets);
+            
+            
         }
         
-        
-        [HttpGet("{setName}/GetCardSet", Name = "GetCardSet")]
-        public ActionResult<FlipcardSet> GetSet(string setName)
-        {
-            var set = _CardSet.FirstOrDefault(f => f.SetName == setName);
-            if (set == null)
-            {
-                return NotFound();
-            }
-            return Content(JsonConvert.SerializeObject(set),"application/json");
-        }
 
-        [HttpGet("{setName}/CardsOfSomeState")]
-        public ActionResult<List<Flipcard>> GetCardsOfSomeState(string setName,  [FromQuery]  FlipcardState state)
+        [HttpGet("{setName}/GetCardSet")]
+        public async Task<ActionResult<IEnumerable<FlipcardSet>>> GetSet(string setName)
         {
-            var set = _CardSet.FirstOrDefault(f => f.SetName == setName);
+            var set = await _context.sets.FindAsync(setName);
             if (set == null)
             {
                 return NotFound();
             }
             
-            var card = set.FlipcardsList.Where(f => f.State == state).ToList();
-            if (card.Count == 0)
-            {
-                return NotFound();
-            }
-            return Content(JsonConvert.SerializeObject(card), "application/json");
+            return Ok(set);
         }
-
-        [HttpPut("{setName}/ShuffleCards")]
-        public ActionResult<List<Flipcard>> PutShuffleCards(string setName)
+        
+        
+        
+        
+        [HttpGet("{setName}/CardsOfAnotherState")]
+        public async Task<ActionResult<IEnumerable<FlipcardSet>>> GetCardsOfSomeState(string setName, [FromQuery]  FlipcardState state)
         {
-            var set = _CardSet.FirstOrDefault(f => f.SetName == setName);
+            var set = await _context.sets.FindAsync(setName);
             if (set == null)
             {
                 return NotFound();
             }
             
+            var cards = set.FlipcardsList.FindAll(x => x.State == state);
+            return Ok(cards);
+        }
+        
+
+        [HttpGet("{setName}/ShuffleCards")]
+
+        public async Task<ActionResult<List<Flipcard>>> GetShuffleCards(string setName)
+        {
+            var set = await _context.sets.FindAsync(setName);
+            if (set == null)
+            {
+                return NotFound();
+            }
             set.CardShuffle();
-            return Ok();
+            return Ok(set);
             
         }
+        
+        
         
         [HttpPost("CreateFullSet")]
-        public ActionResult<FlipcardSet> Post([FromBody] FlipcardSetDto newSet)
+        
+        public async Task<ActionResult<FlipcardSet>> PostAsync([FromBody] FlipcardSet newSet)
         {
-            
-            var set = _CardSet.FirstOrDefault(f => f.SetName == newSet.SetName);
-            if (set == null)
-            {
-                newSet.FlipcardsList.Sort((x,y) => x.Id.CompareTo(y.Id));
-                for (int i = 0; i < newSet.FlipcardsList.Count; i++)
-                {
-                    Flipcard t = newSet.FlipcardsList[i];
-                    t.Id = i + 1;
-                    newSet.FlipcardsList[i] = t;
-                }
-                
-                _CardSet.Add(new FlipcardSet(newSet));
-                
-            }
-            else
-            {
-                return Conflict();
-            }
-            
-            
-            return CreatedAtAction(nameof(GetSet), new { setName = newSet.SetName }, newSet);
-        }
+            using var transaction = await _context.Database.BeginTransactionAsync();
 
+            try
+            {
+               
+                if (_context.sets.Any(s => s.SetName == newSet.SetName))
+                {
+                    return Conflict("A set with this name already exists.");
+                }
+
+               
+                _context.Add(newSet);
+                await _context.SaveChangesAsync();
+        
+                await transaction.CommitAsync();
+
+                return Ok(await GetSet(newSet.SetName));
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync();
+                return StatusCode(500, "An error occurred while creating the set.");
+            }
+            return Ok();
+        }
 
         [HttpPost("{setName}/CreateEmptySet", Name = "PostSet")]
-        public ActionResult<FlipcardSet> PostSet(string setName)
-        {
-            var set = _CardSet.FirstOrDefault(f => f.SetName == setName);
 
-            if (set == null)
+        public async Task<ActionResult<FlipcardSet>> PostSet(string setName)
+        {
+            var set = await _context.sets.FindAsync(setName);
+            if (!(set == null))
             {
-                _CardSet.Add(new FlipcardSet(setName));
-                return Ok();
-            }
-            else
-            {
-                return Conflict();
+                return Conflict("A set with this name already exists.");
             }
             
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                await _context.AddAsync(new FlipcardSet { SetName = setName });
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+                
+            }
+            catch (Exception e)
+            {
+                
+                await transaction.RollbackAsync();
+                return StatusCode(500, "An error occurred while creating the set.");
+                
+            }
+            return Ok(await GetSet(setName));
         }
+        
+        
 
         [HttpPost("{setName}/CreateCard", Name = "PostCard")]
-        public ActionResult<FlipcardSet> PostCard(string setName, [FromBody] Flipcard card)
+        public async Task<ActionResult<Flipcard>> PostCard(string setName, [FromBody] Flipcard card)
         {
-            var set = _CardSet.FirstOrDefault(f => f.SetName == setName);
-            if (set == null)
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
             {
-                return Conflict();
-            }
-            else
-            {
-                if (!set.FlipcardsList.Contains(card))
+                var set = await _context.sets.FindAsync(setName);
+                if (set == null)
                 {
-                    set.AddFlipcard(card.State,card.Question,card.Concept,card.Mnemonic);
-                    
+                    return Conflict("A set with this name was not found.");
                 }
 
-                return Ok();
+                if (set.FlipcardsList.Contains(card))
+                {
+                    return Conflict("A card like this already exists.");
+                }
+                set.AddFlipcard(card.State,card.Question,card.Concept,card.Mnemonic);
+                
+                var card_t = set.FlipcardsList.Last();
+                _context.Entry(card_t).State = EntityState.Added;
+                
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+                
+                
             }
+            catch (Exception e)
+            {
+                await transaction.RollbackAsync();
+                return StatusCode(500, "An error occurred while creating the card.");
+            }
+            return Ok(await GetSet(setName));
+            
         }
         
-        
-        
+
         [HttpPut("UpdateSet")]
-        public ActionResult<FlipcardSet> PutWholeSet([FromBody] FlipcardSetDto updatedSet)
-        {   
-            
-            updatedSet.FlipcardsList.Sort((x,y) => x.Id.CompareTo(y.Id));
-            for (int i = 0; i < updatedSet.FlipcardsList.Count; i++)
-            {
-                Flipcard t = updatedSet.FlipcardsList[i];
-                t.Id = i + 1;
-                updatedSet.FlipcardsList[i] = t;
-            }
-            
-            var set = _CardSet.FirstOrDefault(f => f.SetName == updatedSet.SetName);
-            if (set == null)
-            {
-                FlipcardSet newSet = new FlipcardSet(updatedSet);
-                _CardSet.Add(newSet);   
-            }
-            else
-            {
-                set.FlipcardsList = updatedSet.FlipcardsList;
-            }
+        public async Task<ActionResult<FlipcardSet>> PutSet([FromBody] FlipcardSet set)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
 
-            return Ok();
+            try
+            {
+                var existingSet = await _context.sets.FindAsync(set.SetName);
+                if (existingSet == null)
+                {
+                    ///return Conflict("A set with this name doesnt exist.");
+                    existingSet = new FlipcardSet { SetName = set.SetName };
+                    _context.Entry(existingSet).State = EntityState.Added;
+                }
+                
+                var updatedCardIds = set.FlipcardsList.Select(x => x.Id).ToList();
+                var cardsToRemove = existingSet.FlipcardsList.Where(x => !updatedCardIds.Contains(x.Id)).ToList();
+                _context.RemoveRange(cardsToRemove);
 
+                foreach (var updatedCard in set.FlipcardsList)
+                {
+                    var existingCard = existingSet.FlipcardsList.FirstOrDefault(c => c.Id == updatedCard.Id);
+                    if (existingCard != null)
+                    {
+                        
+                        existingCard.Question = updatedCard.Question;
+                        existingCard.Concept = updatedCard.Concept;
+                        existingCard.Mnemonic = updatedCard.Mnemonic;
+                        existingCard.State = updatedCard.State;
+                    }
+                    else
+                    {
+                        existingSet.AddFlipcard(updatedCard.State,updatedCard.Question,updatedCard.Concept,updatedCard.Mnemonic);
+                        var card = existingSet.FlipcardsList.Last();
+                        _context.Entry(card).State = EntityState.Added;
+                    }
+                }
+
+                
+                await _context.SaveChangesAsync();
+                
+                await transaction.CommitAsync();
+
+                return NoContent(); 
+
+            }
+            catch (Exception e)
+            {
+                await transaction.RollbackAsync();
+                return StatusCode(500, "An error occurred while updating the set.");
+            }
         }
         
-        [HttpPut("{setName}/UpdateOrAddCard", Name = "UpdateOrAddCard")]
-        public ActionResult<FlipcardSet> PutCard(string setName, [FromBody] Flipcard updatedCard)
-        {   
-            
-            var set = _CardSet.FirstOrDefault(f => f.SetName == setName);
-            if (set == null)
-            {
-                return NotFound();
-                
-            }
 
-            var card = set.FlipcardsList.FirstOrDefault(f => f.Id == updatedCard.Id);
-            if (card.Equals(default(Flipcard)))
+        [HttpPut("{setName}/UpdateorAddCard", Name = "PutCard")]
+        public async Task<ActionResult<Flipcard>> PutCard(string setName,[FromBody] Flipcard card)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
             {
-                set.AddFlipcard(updatedCard.State,updatedCard.Question,updatedCard.Concept,updatedCard.Mnemonic);
+                var set = await _context.sets.FindAsync(setName);
+                if (set == null)
+                {
+                    return NotFound("A set with this name was not found.");
+                }
+
+                var existingCard = set.FlipcardsList.FirstOrDefault(x => x.Id == card.Id);
+                if (existingCard == null)
+                {
+                    set.AddFlipcard(card.State, card.Question, card.Concept, card.Mnemonic);
+                    var lastCard = set.FlipcardsList.Last();
+                    _context.Entry(lastCard).State = EntityState.Added;
+                }
+                else
+                {
+                    existingCard.Question = card.Question;
+                    existingCard.Concept = card.Concept;
+                    existingCard.Mnemonic = card.Mnemonic;
+                    existingCard.State = card.State;   
+                }
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
             }
-            else
+            catch (Exception e)
             {
-                set.FlipcardsList[updatedCard.Id - 1 ] = updatedCard;
-                
+                await transaction.RollbackAsync();
+                return StatusCode(500, "An error occurred while updating the set.");
             }
-            return Ok();
-            
+            return Ok(await GetSet(setName));
         }
         
         [HttpDelete("{setName}/DeleteSet")]
-        public ActionResult DeleteSet(string setName)
+        public async Task<ActionResult<FlipcardSet>> DeleteSet(string setName)
         {
-            var set = _CardSet.FirstOrDefault(f => f.SetName == setName);
-            if (set == null)
-            {
-                return NotFound();
-            }
+            using var transaction = await _context.Database.BeginTransactionAsync();
 
-            _CardSet.Remove(set);
-            return Ok();
-        }
-
-        [HttpDelete("{setName}/{Id}/DeleteCard", Name = "DeleteCard")]
-        public ActionResult<FlipcardSet> DeleteCard(string setName,int Id)
-        {
-            var set = _CardSet.FirstOrDefault(f => f.SetName == setName);
-            if (set == null)
+            try
             {
-                return NotFound();
-            }
-
-           
-            int t = set.FlipcardsList.Count;
-            if (t >= Id)
-            {
-                for (int i = Id; i < t ; i++)
+                
+                var set = await _context.sets.FindAsync(setName);
+                if (set == null)
                 {
-                    Flipcard t1 = set.FlipcardsList[i];
-                    t1.Id--;
-                    set.FlipcardsList[i] = t1;
+                    return NotFound("A set with this name was not found.");
                 }
-                set.FlipcardsList.Remove(set.FlipcardsList[Id - 1]);
-                return Ok();
+
+                _context.sets.Remove(set);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+                return Ok($"Set with name {setName} has been deleted.");
+
             }
-            return NotFound();
+            catch (Exception e)
+            {
+                transaction.Rollback();
+                return StatusCode(500, "An error occurred while deleting the set.");
+            }
+        }
+        
+        
+        
+        [HttpDelete("{setName}/{Id}/DeleteCard", Name = "DeleteCard")]
+        public async Task<ActionResult<FlipcardSet>> DeleteCard(string setName, int Id)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                
+                var set = await _context.sets.FindAsync(setName);
+                if (set == null)
+                {
+                    return NotFound("A set with this name was not found.");
+                }
+                
+                var card = set.FlipcardsList.FirstOrDefault(c => c.Id == Id);
+        
+                if (card == null)
+                {
+                    return NotFound("The specified card was not found in this set.");
+                }
+                _context.Remove(card);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+                return Ok($"Card with ID {Id} has been deleted from set {setName}.");
+            }
+            catch (Exception e)
+            {
+                transaction.Rollback();
+                return StatusCode(500, "An error occurred while deleting the card.");
+            }
             
         }
         

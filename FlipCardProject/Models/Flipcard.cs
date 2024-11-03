@@ -1,12 +1,17 @@
-﻿namespace FlipCardProject.Models;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+
+namespace FlipCardProject.Models;
 
 using System;
 using FlipCardProject.Enums;
 using FlipCardProject.Records;
-
-public struct Flipcard : IEquatable<Flipcard>
+[Owned]
+public sealed record Flipcard : IEquatable<Flipcard>
 {
+    
     private int _id;
+   
     private string _concept;
     private string _mnemonic;
     private FlipcardState _state;
@@ -18,23 +23,28 @@ public struct Flipcard : IEquatable<Flipcard>
         get { return _id; }
         set { _id = value; }
     }
+    
     public string Question
         {
             get { return _question; }
             set { _question = value; }
         }
+    
+    
+   
     public string Concept
     {
         get { return _concept; }
         set { _concept = value; }
     }
-
+    
     public string Mnemonic
     {
         get { return _mnemonic; }
         set { _mnemonic = value; }
     }
-
+    
+   
     public FlipcardState State
     {
         get { return _state; }
@@ -52,17 +62,20 @@ public struct Flipcard : IEquatable<Flipcard>
     
     public bool Equals(Flipcard other)
     {
+        if (other is null) return false;
         return _mnemonic == other._mnemonic &&
                _state == other._state &&
                _question == other._question &&
                _concept == other._concept;
     }
-    public override bool Equals(object obj)
+
+    /*public override bool Equals(object? obj)
     {
-        if (obj is Flipcard)
-        {
-            return Equals((Flipcard)obj);
-        }
-        return false;
+        return obj is Flipcard card && Equals(card);
+    }*/
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(_mnemonic, _state, _question, _concept);
     }
 }
