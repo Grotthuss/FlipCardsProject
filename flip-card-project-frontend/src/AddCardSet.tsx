@@ -36,7 +36,7 @@ const AddCardSet: React.FC<AddCardSetProps> = ({ onAdd }) => {
         }
         
         try {
-            const response = await fetch(`https://localhost:7146/api/Home/${setName}/CreateEmptySet`, {
+            const response = await fetch(`https://localhost:44372/api/Home/${setName}/CreateEmptySet`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
