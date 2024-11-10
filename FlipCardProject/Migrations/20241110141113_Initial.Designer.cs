@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FlipCardProject.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241101151341_Initial")]
+    [Migration("20241110141113_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -26,12 +26,19 @@ namespace FlipCardProject.Migrations
 
             modelBuilder.Entity("FlipCardProject.Models.FlipcardSet", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<string>("SetName")
-                        .HasColumnType("nvarchar(450)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("SetName");
+                    b.HasKey("Id");
 
-                    b.ToTable("sets");
+                    b.ToTable("FlipCardSets");
                 });
 
             modelBuilder.Entity("FlipCardProject.Models.FlipcardSet", b =>
@@ -54,9 +61,8 @@ namespace FlipCardProject.Migrations
                                 .HasMaxLength(100)
                                 .HasColumnType("nvarchar(100)");
 
-                            b1.Property<string>("OwnerSetName")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(450)");
+                            b1.Property<int>("OwnerId")
+                                .HasColumnType("int");
 
                             b1.Property<string>("Question")
                                 .IsRequired()
@@ -69,12 +75,12 @@ namespace FlipCardProject.Migrations
 
                             b1.HasKey("Id");
 
-                            b1.HasIndex("OwnerSetName");
+                            b1.HasIndex("OwnerId");
 
                             b1.ToTable("Flipcard");
 
                             b1.WithOwner()
-                                .HasForeignKey("OwnerSetName");
+                                .HasForeignKey("OwnerId");
                         });
 
                     b.Navigation("FlipcardsList");

@@ -11,14 +11,16 @@ namespace FlipCardProject.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "sets",
+                name: "FlipCardSets",
                 columns: table => new
                 {
-                    SetName = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SetName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_sets", x => x.SetName);
+                    table.PrimaryKey("PK_FlipCardSets", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -31,23 +33,23 @@ namespace FlipCardProject.Migrations
                     Concept = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Mnemonic = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     State = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OwnerSetName = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    OwnerId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Flipcard", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Flipcard_sets_OwnerSetName",
-                        column: x => x.OwnerSetName,
-                        principalTable: "sets",
-                        principalColumn: "SetName",
+                        name: "FK_Flipcard_FlipCardSets_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "FlipCardSets",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Flipcard_OwnerSetName",
+                name: "IX_Flipcard_OwnerId",
                 table: "Flipcard",
-                column: "OwnerSetName");
+                column: "OwnerId");
         }
 
         /// <inheritdoc />
@@ -57,7 +59,7 @@ namespace FlipCardProject.Migrations
                 name: "Flipcard");
 
             migrationBuilder.DropTable(
-                name: "sets");
+                name: "FlipCardSets");
         }
     }
 }

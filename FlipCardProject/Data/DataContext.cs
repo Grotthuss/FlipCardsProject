@@ -7,7 +7,7 @@ namespace FlipCardProject.Data;
 
 public class DataContext : DbContext
 {
-    public DbSet<FlipcardSet> sets { get; set; }
+    public DbSet<FlipcardSet> FlipCardSets { get; set; }
 
     public DataContext(DbContextOptions<DataContext> options) : base(options)
     {
@@ -19,11 +19,12 @@ public class DataContext : DbContext
         
         modelBuilder.Entity<FlipcardSet>(entity =>
         {
-            entity.HasKey(p => p.SetName);
-            
+            entity.Property("Id").ValueGeneratedOnAdd().IsRequired();
+            entity.HasKey(p => p.Id);
+            entity.Property(p => p.SetName).IsRequired();
             entity.OwnsMany(p => p.FlipcardsList,a =>
             {
-                a.WithOwner().HasForeignKey("OwnerSetName"); // Foreign key in Flipcard
+                a.WithOwner().HasForeignKey("OwnerId"); // Foreign key in Flipcard
                 a.Property("Id").ValueGeneratedOnAdd().IsRequired();
                 a.HasKey(f => f.Id);
                 a.Property(f => f.Concept).HasMaxLength(100).IsRequired();

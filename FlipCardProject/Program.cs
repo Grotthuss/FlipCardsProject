@@ -24,14 +24,9 @@ builder.Services.AddSwaggerGen();
 
 
 
-builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection("DatabaseSettings"));
-
 builder.Services.AddDbContext<DataContext>((serviceProvider, options) =>
 {
-    var dbSettings = serviceProvider.GetRequiredService<IOptions<DatabaseSettings>>().Value;
-    options.UseSqlServer(dbSettings.ConnectionString);
-    
-    
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseSettings"));
 });
 
 
@@ -47,7 +42,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
+    dbContext.Database.Migrate();
+}
 app.MapControllers();
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");

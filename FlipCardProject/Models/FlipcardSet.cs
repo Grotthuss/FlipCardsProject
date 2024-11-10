@@ -12,6 +12,8 @@ using Newtonsoft.Json.Serialization;
 [JsonObject(MemberSerialization.OptIn)]
 public class FlipcardSet
 {
+    public int Id { get; set; }
+
     [JsonProperty]
     
     private string _set_name;
