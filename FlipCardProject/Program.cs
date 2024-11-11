@@ -1,5 +1,6 @@
 using System.Configuration;
 using FlipCardProject.Data;
+using FlipCardProject.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Options;
@@ -29,6 +30,7 @@ builder.Services.AddDbContext<DataContext>((serviceProvider, options) =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseSettings"));
 });
 
+builder.Services.AddScoped<IFlipcardRepository, FlipcardRepository>();
 
 
 
