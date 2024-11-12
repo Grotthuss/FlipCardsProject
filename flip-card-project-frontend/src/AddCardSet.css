@@ -17,6 +17,12 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
+    transition: border-color 2s ease-out;
+}
+
+/* Error input field */
+.add-card-set-container input.input-error {
+    border: 1px solid red;
 }
 
 .add-card-set-container button {

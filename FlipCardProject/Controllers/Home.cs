@@ -200,5 +200,22 @@ namespace FlipCardProject.Controllers
             
         }
         
+        [HttpPost("LogError")]
+        public IActionResult LogError([FromBody] ErrorLog log)
+        {
+            string logFilePath = Path.Combine(Directory.GetCurrentDirectory(), "logs", "errorLog.txt");
+        
+            Directory.CreateDirectory(Path.GetDirectoryName(logFilePath));
+        
+            System.IO.File.AppendAllText(logFilePath, $"{DateTime.Now}: {log.Message}\n");
+        
+            return Ok();
+        }
+        
+        public class ErrorLog
+        {
+            public string Message { get; set; }
+        }
+        
     }
 }

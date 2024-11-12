@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './AddCardSet.css';
 import './errorEnums.ts';
 import {Errors} from "./errorEnums";
+import {EmptyCardSetNameException} from "./EmptyCardSetNameException";
 
 interface AddCardSetProps {
     onAdd: (setName: string) => void;
@@ -10,16 +11,30 @@ interface AddCardSetProps {
 const AddCardSet: React.FC<AddCardSetProps> = ({ onAdd }) => {
     const [setName, setSetName] = useState('');
     const [error, setError] = useState<string | null>(null);
+    const [styleChange, setStyleChange] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
 
         if (!setName) {
-            setError(Errors.NAME);
+            try {
+                setError(Errors.NAME);
+                throw new EmptyCardSetNameException();
+            }
+            catch (e) {
+                if (e instanceof EmptyCardSetNameException) {
+
+                    setStyleChange(true);
+                    
+                    setTimeout(() => {
+                        setStyleChange(false);
+                    }, 2000);
+                }
+            }
             return;
         }
-
+        
         try {
             const response = await fetch(`https://localhost:44372/api/Home/${setName}/CreateEmptySet`, {
                 method: 'POST',
@@ -49,6 +64,7 @@ const AddCardSet: React.FC<AddCardSetProps> = ({ onAdd }) => {
                 placeholder="Enter card set name"
                 value={setName}
                 onChange={(e) => setSetName(e.target.value)}
+                className={styleChange ? 'input-error' : ''}
             />
 
             <button type="submit">Add Card Set</button>
