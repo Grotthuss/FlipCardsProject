@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.ComponentModel.DataAnnotations;
 
 namespace FlipCardProject.Models;
 
@@ -9,23 +10,16 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 [JsonObject(MemberSerialization.OptIn)]
-public class FlipcardSet : IEnumerable<Flipcard>
+public class FlipcardSet
 {
+    public int Id { get; set; }
+
     [JsonProperty]
+    
     private string _set_name;
     [JsonProperty]
+    
     private List<Flipcard> _flipcards_list;
-    
-    
-    public IEnumerator<Flipcard> GetEnumerator()
-    {
-        return _flipcards_list.GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
     
     public string SetName
     {
@@ -39,6 +33,10 @@ public class FlipcardSet : IEnumerable<Flipcard>
         set { _flipcards_list = value; }
     }
 
+    public FlipcardSet()
+    {
+        
+    }
     public FlipcardSet(string setName)
     {
         _set_name = setName;
@@ -55,8 +53,8 @@ public class FlipcardSet : IEnumerable<Flipcard>
 
         Flipcard flipcard = new Flipcard(question:question,concept: concept, mnemonic: mnemonic, state: state);
         
-        object cardId = _flipcards_list.Count + 1;
-        flipcard.Id = (int)cardId;
+        /*object cardId = _flipcards_list.Count + 1;
+        flipcard.Id = (int)cardId;*/
 
         _flipcards_list.Add(flipcard);
     }
