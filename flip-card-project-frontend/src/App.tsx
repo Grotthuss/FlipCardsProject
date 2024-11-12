@@ -10,8 +10,8 @@ function App() {
         <Router>
             <Routes>
                 <Route path="/" element={<CardSetSelection />} />
-                <Route path="/card-set/:title" element={<FlipCard />} />
-                <Route path="/quizcard/:title" element={<QuizFlipcard />} />
+                <Route path="/card-set/:id" element={<FlipCard />} />
+                <Route path="/quizcard/:id" element={<QuizFlipcard />} />
             </Routes>
         </Router>
     );

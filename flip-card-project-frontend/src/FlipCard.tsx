@@ -5,46 +5,41 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Errors } from "./errorEnums";
 
 interface FlipCardData {
-    Question: string;
-    Concept: string;
-    Mnemonic: string;
+    id: number;
+    question: string;
+    concept: string;
+    mnemonic: string;
+    state: {
+        _state: number;
+    };
 }
 
 const FlipCard: React.FC = () => {
-    const { title } = useParams<{ title: string }>();
+    const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [cards, setCards] = React.useState<FlipCardData[]>([]);
     const [loading, setLoading] = React.useState<boolean>(true);
     const [error, setError] = React.useState<string | null>(null);
-    const [inputValue, setInputValue] = React.useState('');
 
     const shuffleCards = async () => {
         try {
-            const response = await fetch(`https://localhost:44372/api/Home/${title}/ShuffleCards`, {
-                method: 'PUT',
+            const response = await fetch(`https://localhost:44372/api/Home/${id}/ShuffleCards`, {
+                method: 'GET',
             });
 
             if (!response.ok) {
                 throw new Error('Failed to shuffle cards.');
             }
 
-            fetchCards();
+            const data = await response.json();
+            if (data && Array.isArray(data.flipcardsList)) {
+                setCards(data.flipcardsList);
+            } else {
+                setError(Errors.FORMAT + JSON.stringify(data));
+            }
         } catch (error) {
             setError(`Shuffle Error: ${(error as Error).message}`);
         }
-    };
-
-
-    const flipAnsweredCard = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setInputValue(event.target.value);
-        const updatedCards = [...cards];
-
-        updatedCards.forEach((card, index) => {
-            if (card.Concept.toLowerCase() === event.target.value.toLowerCase()) {
-                handleFlip(index);
-            }
-        });
-        setCards(updatedCards);
     };
 
     const handleFlip = (index: number) => {
@@ -55,19 +50,20 @@ const FlipCard: React.FC = () => {
     };
 
     const fetchCards = async () => {
-        if (!title) {
+        if (!id) {
             setError(Errors.TITLE);
             setLoading(false);
             return;
         }
         try {
-            const response = await fetch(`https://localhost:44372/api/Home/${title}/GetCardSet`);
+            const response = await fetch(`https://localhost:44372/api/Home/${id}/GetCardSet`);
             if (!response.ok) {
                 throw new Error(Errors.NETWORK);
             }
             const data = await response.json();
-            if (data && Array.isArray(data._flipcards_list)) {
-                setCards(data._flipcards_list);
+
+            if (data && Array.isArray(data.flipcardsList)) {
+                setCards(data.flipcardsList);
             } else {
                 setError(Errors.FORMAT + JSON.stringify(data));
             }
@@ -80,20 +76,20 @@ const FlipCard: React.FC = () => {
 
     React.useEffect(() => {
         fetchCards();
-    }, [title]);
+    }, [id]);
 
     const handleAddFlipCard = async (question: string, concept: string, mnemonic: string) => {
-        const newCard = {
-            Question: question,
-            Concept: concept,
-            Mnemonic: mnemonic,
+        const newCard: Omit<FlipCardData, 'id'> = {
+            question: question,
+            concept: concept,
+            mnemonic: mnemonic,
             state: {
-                _state: 0,
-            },
+                _state: 0
+            }
         };
 
         try {
-            const response = await fetch(`https://localhost:44372/api/Home/${title}/CreateCard`, {
+            const response = await fetch(`https://localhost:44372/api/Home/${id}/CreateCard`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newCard),
@@ -101,10 +97,11 @@ const FlipCard: React.FC = () => {
 
             if (!response.ok) {
                 const errorMessage = await response.text();
+                console.error("Error response:", errorMessage);
                 throw new Error(`${Errors.CARD} Server response: ${errorMessage}`);
             }
 
-            setCards((prevCards) => [...prevCards, newCard]);
+            await fetchCards();
             setError(null);
 
         } catch (err) {
@@ -113,7 +110,7 @@ const FlipCard: React.FC = () => {
     };
 
     const goToQuiz = () => {
-        navigate(`/quizcard/${title}`, { state: { cards } });
+        navigate(`/quizcard/${id}`, { state: { cards } });
     };
 
     if (loading) {
@@ -131,17 +128,17 @@ const FlipCard: React.FC = () => {
                     cards.map((card, index) => (
                         <div
                             className="flip-card"
-                            key={index}
+                            key={card.id}
                             id={`flipCard-${index}`}
                             onClick={() => handleFlip(index)}
                         >
                             <div className="flip-card-inner">
                                 <div className="flip-card-front">
-                                    <p>{card.Question}</p>
-                                    <h2>{card.Mnemonic}</h2>
+                                    <p>{card.question}</p>
+                                    <h2>{card.mnemonic}</h2>
                                 </div>
                                 <div className="flip-card-back">
-                                    <h2>{card.Concept}</h2>
+                                    <h2>{card.concept}</h2>
                                 </div>
                             </div>
                         </div>

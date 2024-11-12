@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import './AddCardSet.css';
-import './errorEnums.ts';
-import {Errors} from "./errorEnums";
-import {EmptyCardSetNameException} from "./EmptyCardSetNameException";
+import { Errors } from "./errorEnums";
+import { EmptyCardSetNameException } from "./EmptyCardSetNameException";
 
 interface AddCardSetProps {
-    onAdd: (setName: string) => void;
+    onAdd: (id: number, setName: string) => void;
 }
 
 const AddCardSet: React.FC<AddCardSetProps> = ({ onAdd }) => {
@@ -17,16 +16,13 @@ const AddCardSet: React.FC<AddCardSetProps> = ({ onAdd }) => {
         e.preventDefault();
         setError(null);
 
-        if (!setName) {
+        if (!setName.trim()) {
             try {
-                setError(Errors.NAME);
                 throw new EmptyCardSetNameException();
-            }
-            catch (e) {
+            } catch (e) {
                 if (e instanceof EmptyCardSetNameException) {
-
+                    setError(e.message);
                     setStyleChange(true);
-                    
                     setTimeout(() => {
                         setStyleChange(false);
                     }, 2000);
@@ -34,22 +30,33 @@ const AddCardSet: React.FC<AddCardSetProps> = ({ onAdd }) => {
             }
             return;
         }
-        
+
         try {
-            const response = await fetch(`https://localhost:44372/api/Home/${setName}/CreateEmptySet`, {
+            const response = await fetch(`https://localhost:44372/api/Home/CreateFullSet`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify([]),
+                body: JSON.stringify({
+                    setName: setName.trim(),
+                    flipcardsList: []
+                }),
             });
 
             if (!response.ok) {
-                throw new Error(Errors.CREATE_SET);
+                const errorMessage = await response.text();
+                console.error("Error response:", errorMessage);
+                throw new Error(Errors.CREATE_SET + ` Server response: ${errorMessage}`);
             }
 
-            onAdd(setName);
-            setSetName('');
+            const newCardSet = await response.json();
+
+            if (newCardSet && newCardSet.id && newCardSet.setName) {
+                onAdd(newCardSet.id, newCardSet.setName);
+                setSetName('');
+            } else {
+                throw new Error("Unexpected response format from CreateFullSet API.");
+            }
         } catch (err) {
             setError(Errors.CREATE_SET + (err as Error).message);
         }
@@ -66,6 +73,8 @@ const AddCardSet: React.FC<AddCardSetProps> = ({ onAdd }) => {
                 onChange={(e) => setSetName(e.target.value)}
                 className={styleChange ? 'input-error' : ''}
             />
+
+            {error && <p className="error-message">{error}</p>}
 
             <button type="submit">Add Card Set</button>
         </form>

@@ -2,18 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './CardSetSelection.css';
 import AddCardSet from './AddCardSet';
-import {Errors} from "./errorEnums";
+import { Errors } from "./errorEnums";
 
 interface CardAttribute {
-    Id: number;
-    Question: string;
-    Concept: string;
-    Mnemonic: string;
+    id: number;
+    question: string;
+    concept: string;
+    mnemonic: string;
 }
 
 interface CardSet {
-    _set_name: string;
-    _flipcards_list: CardAttribute[];
+    id: number;
+    setName: string;
+    flipcardsList: CardAttribute[];
 }
 
 const CardSetSelection: React.FC = () => {
@@ -40,10 +41,11 @@ const CardSetSelection: React.FC = () => {
         fetchCardSets();
     }, []);
 
-    const handleAddCardSet = (setName: string) => {
+    const handleAddCardSet = (id: number, setName: string) => {
         const newCardSet: CardSet = {
-            _set_name: setName,
-            _flipcards_list: [],
+            id: id,
+            setName: setName,
+            flipcardsList: [],
         };
         setCardSets([...cardSets, newCardSet]);
     };
@@ -60,11 +62,11 @@ const CardSetSelection: React.FC = () => {
         <div className="card-set-selection-container">
             <div className="card-set-list">
                 {Array.isArray(cardSets) && cardSets.length > 0 ? (
-                    cardSets.map((cardSet, index) => (
-                        <div key={index} className="card-set">
-                            <Link to={`/card-set/${cardSet._set_name}`}>
+                    cardSets.map((cardSet) => (
+                        <div key={cardSet.id} className="card-set">
+                            <Link to={`/card-set/${cardSet.id}`}>
                                 <div className="card">
-                                    <h2>{cardSet._set_name}</h2>
+                                    <h2>{cardSet.setName}</h2>
                                 </div>
                             </Link>
                         </div>
