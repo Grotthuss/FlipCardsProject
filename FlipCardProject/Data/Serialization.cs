@@ -53,7 +53,7 @@ public class Serialization
         {
             Serialization serializationCardSet = new Serialization();
             
-            serializationCardSet.title = cardSet.SetName;
+            serializationCardSet.title = cardSet.Name;
             
             foreach (var card in cardSet.FlipcardsList)
             {
