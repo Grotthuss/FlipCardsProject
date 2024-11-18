@@ -1,0 +1,17 @@
+11/12/2024 2:41:20 PM: User did not enter a Card set name.
+11/12/2024 2:41:21 PM: User did not enter a Card set name.
+11/12/2024 2:41:25 PM: User did not enter a Card set name.
+11/12/2024 2:41:35 PM: User did not enter a Card set name.
+11/12/2024 2:41:40 PM: User did not enter a Card set name.
+11/12/2024 6:41:33 PM: User did not enter a Card set name.
+11/12/2024 6:46:21 PM: User did not enter a Card set name.
+11/12/2024 6:46:27 PM: User did not enter a Card set name.
+11/12/2024 6:49:28 PM: User did not enter a Card set name.
+11/12/2024 6:49:32 PM: User did not enter a Card set name.
+11/12/2024 6:50:23 PM: Please enter a valid set name.
+11/12/2024 6:51:05 PM: Please provide a valid set name.
+11/12/2024 6:55:29 PM: User did not enter a Card set name.
+11/12/2024 6:55:34 PM: User did not enter a Card set name.
+11/13/2024 6:29:53 PM: User did not enter a Card set name.
+11/18/2024 1:36:12 PM: User did not enter a Card set name.
+11/18/2024 2:51:55 PM: User did not enter a Card set name.

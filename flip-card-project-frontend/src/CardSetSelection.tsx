@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import './CardSetSelection.css';
 import AddCardSet from './AddCardSet';
 import { Errors } from "./errorEnums";
@@ -13,7 +13,8 @@ interface CardAttribute {
 
 interface CardSet {
     id: number;
-    setName: string;
+    userId: number;
+    name: string;
     flipcardsList: CardAttribute[];
 }
 
@@ -21,16 +22,23 @@ const CardSetSelection: React.FC = () => {
     const [cardSets, setCardSets] = useState<CardSet[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const location = useLocation();
 
     useEffect(() => {
         const fetchCardSets = async () => {
+            setLoading(true);
+            setError(null);
             try {
                 const response = await fetch('https://localhost:44372/api/Home/GetAllSets');
                 if (!response.ok) {
                     throw new Error(Errors.NETWORK);
                 }
-                const data = await response.json();
-                setCardSets(data);
+                const data: CardSet[] = await response.json();
+                const updatedData = data.map((cardSet) => ({
+                    ...cardSet,
+                    userId: 1
+                }));
+                setCardSets(updatedData);
             } catch (error) {
                 setError(Errors.SETS + (error as Error).message);
             } finally {
@@ -39,12 +47,13 @@ const CardSetSelection: React.FC = () => {
         };
 
         fetchCardSets();
-    }, []);
+    }, [location]);
 
     const handleAddCardSet = (id: number, setName: string) => {
         const newCardSet: CardSet = {
             id: id,
-            setName: setName,
+            userId: 1,
+            name: setName,
             flipcardsList: [],
         };
         setCardSets([...cardSets, newCardSet]);
@@ -66,7 +75,7 @@ const CardSetSelection: React.FC = () => {
                         <div key={cardSet.id} className="card-set">
                             <Link to={`/card-set/${cardSet.id}`}>
                                 <div className="card">
-                                    <h2>{cardSet.setName}</h2>
+                                    <h2>{cardSet.name}</h2>
                                 </div>
                             </Link>
                         </div>

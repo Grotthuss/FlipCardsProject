@@ -14,6 +14,13 @@ interface FlipCardData {
     };
 }
 
+interface CardSet {
+    id: number;
+    userId: number;
+    name: string;
+    flipcardsList: FlipCardData[];
+}
+
 const FlipCard: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
@@ -21,6 +28,7 @@ const FlipCard: React.FC = () => {
     const [loading, setLoading] = React.useState<boolean>(true);
     const [error, setError] = React.useState<string | null>(null);
 
+    /*
     const shuffleCards = async () => {
         try {
             const response = await fetch(`https://localhost:44372/api/Home/${id}/ShuffleCards`, {
@@ -41,6 +49,7 @@ const FlipCard: React.FC = () => {
             setError(`Shuffle Error: ${(error as Error).message}`);
         }
     };
+    */
 
     const handleFlip = (index: number) => {
         const flipCard = document.getElementById(`flipCard-${index}`);
@@ -60,7 +69,7 @@ const FlipCard: React.FC = () => {
             if (!response.ok) {
                 throw new Error(Errors.NETWORK);
             }
-            const data = await response.json();
+            const data: CardSet = await response.json();
 
             if (data && Array.isArray(data.flipcardsList)) {
                 setCards(data.flipcardsList);
@@ -110,6 +119,10 @@ const FlipCard: React.FC = () => {
     };
 
     const goToQuiz = () => {
+        if (cards.length === 0) {
+            setError("No cards available for the quiz.");
+            return;
+        }
         navigate(`/quizcard/${id}`, { state: { cards } });
     };
 
@@ -149,7 +162,7 @@ const FlipCard: React.FC = () => {
             </div>
             <AddFlipCard onAddFlipCard={handleAddFlipCard} />
 
-            <button onClick={shuffleCards} className="shuffle-button">Shuffle Cards</button>
+            {/* <button onClick={shuffleCards} className="shuffle-button">Shuffle Cards</button> */}
 
             <button onClick={goToQuiz}>Go to Quiz</button>
         </div>

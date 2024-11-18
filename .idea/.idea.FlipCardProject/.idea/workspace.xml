@@ -12,21 +12,11 @@
     <list default="true" id="b8ff5334-28f4-426b-9ab1-c49f562d17c1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FlipCardProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FlipCardProject/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/config/applicationhost.config" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/config/applicationhost.config" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FlipCardProject.sln" beforeDir="false" afterPath="$PROJECT_DIR$/FlipCardProject.sln" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FlipCardProject/.idea/config/applicationhost.config" beforeDir="false" afterPath="$PROJECT_DIR$/FlipCardProject/.idea/config/applicationhost.config" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FlipCardProject/Controllers/Home.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FlipCardProject/Controllers/Home.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FlipCardProject/Data/DataContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FlipCardProject/Data/DataContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FlipCardProject/Data/Serialization.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FlipCardProject/Data/Serialization.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FlipCardProject/FlipCardProject.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/FlipCardProject/FlipCardProject.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FlipCardProject/Migrations/20241110141113_Initial.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FlipCardProject/Migrations/20241110141113_Initial.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FlipCardProject/Migrations/DataContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FlipCardProject/Migrations/DataContextModelSnapshot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FlipCardProject/Models/Flipcard.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FlipCardProject/Models/Flipcard.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FlipCardProject/Models/FlipcardSet.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FlipCardProject/Models/FlipcardSet.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FlipCardProject/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FlipCardProject/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FlipCardProject/Services/FlipcardRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FlipCardProject/Services/FlipcardRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/AddCardSet.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/AddCardSet.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/CardSetSelection.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/CardSetSelection.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/FlipCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/FlipCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/QuizFlipcard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/QuizFlipcard.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,7 +48,7 @@
     ".NET Project.test.executor": "Run",
     "3acec792-ed65-4ceb-a96b-be19a3f8faae.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "21-saule--fix-frontend-after-adding-user-id",
     "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
