@@ -38,7 +38,8 @@ const AddCardSet: React.FC<AddCardSetProps> = ({ onAdd }) => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    setName: setName.trim(),
+                    userId: 1,
+                    name: setName.trim(),
                     flipcardsList: []
                 }),
             });
@@ -51,8 +52,8 @@ const AddCardSet: React.FC<AddCardSetProps> = ({ onAdd }) => {
 
             const newCardSet = await response.json();
 
-            if (newCardSet && newCardSet.id && newCardSet.setName) {
-                onAdd(newCardSet.id, newCardSet.setName);
+            if (newCardSet && newCardSet.id && newCardSet.name) {
+                onAdd(newCardSet.id, newCardSet.name);
                 setSetName('');
             } else {
                 throw new Error("Unexpected response format from CreateFullSet API.");
