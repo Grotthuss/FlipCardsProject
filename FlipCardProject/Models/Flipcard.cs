@@ -17,6 +17,8 @@ public sealed record Flipcard : IEquatable<Flipcard>
     private FlipcardState _state;
     private string _question;
 
+  //  public int FlipcardSetId { get; set; }
+  //  public int UserId { get; set; }
     
     public int Id
     {
@@ -57,6 +59,8 @@ public sealed record Flipcard : IEquatable<Flipcard>
         _concept = concept;
         _mnemonic = mnemonic;
         _state = state;
+      //  UserId = 0;
+      //  FlipcardSetId = 0;
     }
 
     

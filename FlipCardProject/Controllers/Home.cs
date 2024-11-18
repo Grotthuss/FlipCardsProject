@@ -15,16 +15,41 @@ namespace FlipCardProject.Controllers
     [ApiController]
     public class Home : ControllerBase
     {
-        
-        private readonly IFlipcardRepository _flipcardRepository;
-        public Home(IFlipcardRepository flipcardRepository)
+        private readonly UserTrackingService _userTrackingService;
+        private readonly FlipcardRepository _flipcardRepository;
+        public Home(UserTrackingService userTrackingService,FlipcardRepository flipcardRepository)
         {
             _flipcardRepository = flipcardRepository;
-            
+            _userTrackingService = userTrackingService;
         }
 
-        
-        
+        [HttpPost("{UserID}/StartGame")]
+        public IActionResult StartGame(int UserID)
+        {
+            _userTrackingService.AddPlayer(UserID);
+            return Ok();
+        }
+
+        [HttpPost("{UserId}/EndGame")]
+        public IActionResult EndGame(int UserID)
+        {
+            _userTrackingService.RemovePlayer(UserID);
+            return Ok();
+        }
+
+        [HttpGet("ActivePlayerCount")]
+        public ActionResult<int> GetCurrentPlayerCount()
+        {
+            var count = _userTrackingService.GetCurrentPlayerCount();
+            return Ok(count);
+        }
+
+        [HttpGet("ActivePlayers")]
+        public ActionResult<List<int>> GetActivePlayers()
+        {
+            var players = _userTrackingService.GetActivePlayers();
+            return Ok(players);
+        }
         [HttpGet("GetAllSets")]
         public async Task<ActionResult<IEnumerable<FlipcardSet>>> GetCardSets()
         {

@@ -30,8 +30,8 @@ builder.Services.AddDbContext<DataContext>((serviceProvider, options) =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseSettings"));
 });
 
-builder.Services.AddScoped<IFlipcardRepository, FlipcardRepository>();
-
+builder.Services.AddScoped</*IFlipcardRepository, */FlipcardRepository>();
+builder.Services.AddSingleton<UserTrackingService>();
 
 
 

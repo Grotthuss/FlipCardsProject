@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace FlipCardProject.Models;
 
@@ -10,6 +11,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 [JsonObject(MemberSerialization.OptIn)]
+[Owned]
 public class FlipcardSet
 {
     public int Id { get; set; }
@@ -21,7 +23,10 @@ public class FlipcardSet
     
     private List<Flipcard> _flipcards_list;
     
-    public string SetName
+    public int UserId { get; set; }
+    //public User User { get; set; }
+    
+    public string Name
     {
         get { return _set_name; }
         set { _set_name = value; }
@@ -35,7 +40,8 @@ public class FlipcardSet
 
     public FlipcardSet()
     {
-        
+        UserId = 0;
+       // User = null;
     }
     public FlipcardSet(string setName)
     {

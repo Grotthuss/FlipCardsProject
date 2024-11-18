@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FlipCardProject.Services;
 
+/*
 public interface IFlipcardRepository
 {
     Task<List<FlipcardSet>> GetAllFlipcardSetsAsync();
@@ -16,11 +17,12 @@ public interface IFlipcardRepository
     Task DeleteFlipcardSetAsync(int setId);
     Task DeleteFlipcardAsync(int setId, int cardId);
 }
+*/
 
 
 
 
-public class FlipcardRepository : IFlipcardRepository
+public class FlipcardRepository //: IFlipcardRepository
 {
     private readonly DataContext _context;
 
@@ -30,13 +32,18 @@ public class FlipcardRepository : IFlipcardRepository
     }
 
     public async Task<List<FlipcardSet>> GetAllFlipcardSetsAsync()
-    {
-         return await _context.FlipCardSets.ToListAsync();
+    {   
+        var t = await _context.Users.FindAsync(1);
+         //return await _context.FlipCardSets.ToListAsync();
+         return t.FlipcardSets.ToList();
     }
 
     public async Task<FlipcardSet> GetFlipcardSetByIdAsync(int setId)
     {
-        return await _context.FlipCardSets.FindAsync(setId);
+        var t = await _context.Users.FindAsync(1);
+        
+        //return await _context.FlipCardSets.FindAsync(setId);
+        return t.FlipcardSets.FirstOrDefault(x => x.Id == setId);
     }
 
     public async Task<FlipcardSet> AddFlipcardSetAsync(FlipcardSet flipcardSet)
@@ -44,12 +51,20 @@ public class FlipcardRepository : IFlipcardRepository
         var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
+            var t = await _context.Users.FindAsync(1);
+            if (t == null)
+            {
+                throw new NullReferenceException("User not found");
+            }
             flipcardSet.Id = 0;
             foreach (var card in flipcardSet.FlipcardsList)
             {
                 card.Id = 0;
+                _context.Entry(card).State = EntityState.Added;
             }
-            await _context.FlipCardSets.AddAsync(flipcardSet);
+            t.FlipcardSets.Add(flipcardSet);
+            _context.Entry(flipcardSet).State = EntityState.Added;
+            //await t.FlipCardSets.AddAsync(flipcardSet);
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
             return flipcardSet;
@@ -69,7 +84,14 @@ public class FlipcardRepository : IFlipcardRepository
 
         try
         {
-            var set = await _context.FlipCardSets.FindAsync(setId);
+            var t = await _context.Users.FindAsync(1);
+
+            if (t == null)
+            {
+                throw new NullReferenceException("User not found");
+            }
+
+            var set = t.FlipcardSets.FirstOrDefault(x => x.Id == setId);//await _context.FlipCardSets.FindAsync(setId);
             if (set == null)
             {
                 throw new NullReferenceException();
@@ -97,21 +119,28 @@ public class FlipcardRepository : IFlipcardRepository
         var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
-            var existingSet = await _context.FlipCardSets.FindAsync(flipcardSet.Id);
+            var t = await _context.Users.FindAsync(1);
+            if (t == null)
+            {
+                throw new NullReferenceException("User not found");
+            }
+
+            var existingSet = t.FlipcardSets.FirstOrDefault(x => x.Id == flipcardSet.Id);//await _context.FlipCardSets.FindAsync(flipcardSet.Id);
             if (existingSet == null)
             {
-                existingSet  = new FlipcardSet(flipcardSet.SetName);
+                existingSet  = new FlipcardSet(flipcardSet.Name);
 
                 foreach (var card in flipcardSet.FlipcardsList)
                 {
                     existingSet.AddFlipcard(card.State,card.Question,card.Concept,card.Mnemonic);
                 }
-                await _context.FlipCardSets.AddAsync(existingSet);
-                
+                //await _context.FlipCardSets.AddAsync(existingSet);
+                t.FlipcardSets.Add(existingSet);
+                _context.Entry(existingSet).State = EntityState.Added;
             }
             else
             {
-                existingSet.SetName = flipcardSet.SetName;
+                existingSet.Name = flipcardSet.Name;
 
 
                 var updatedCardIds = flipcardSet.FlipcardsList.Select(x => x.Id).ToList();
@@ -156,7 +185,13 @@ public class FlipcardRepository : IFlipcardRepository
 
         try
         {
-            var set = await _context.FlipCardSets.FindAsync(setId);
+            var t = await _context.Users.FindAsync(1);
+            if (t == null)
+            {
+                throw new NullReferenceException("User not found");
+            }
+
+            var set = t.FlipcardSets.FirstOrDefault(x => x.Id == setId);//await _context.FlipCardSets.FindAsync(setId);
             if (set == null)
             {
               throw new NullReferenceException();
@@ -192,13 +227,19 @@ public class FlipcardRepository : IFlipcardRepository
 
         try
         {   
-            var set = await _context.FlipCardSets.FindAsync(setId);
+            var t = await _context.Users.FindAsync(1);
+            if (t == null)
+            {
+                throw new NullReferenceException("User not found");
+            }
+
+            var set = t.FlipcardSets.FirstOrDefault(x => x.Id == setId);//await _context.FlipCardSets.FindAsync(setId);
             if (set == null)
             {
                 throw new NullReferenceException();
             }
 
-            _context.FlipCardSets.Remove(set);
+            _context.Remove(set);
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
 
@@ -215,7 +256,14 @@ public class FlipcardRepository : IFlipcardRepository
         var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
-            var set = await _context.FlipCardSets.FindAsync(setId);
+            var t = await _context.Users.FindAsync(1);
+
+            if (t == null)
+            {
+                throw new NullReferenceException("no user found");
+            }
+
+            var set = t.FlipcardSets.FirstOrDefault(x => x.Id == setId);//await _context.FlipCardSets.FindAsync(setId);
             if (set == null)
             {
                 throw new NullReferenceException();
