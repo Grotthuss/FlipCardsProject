@@ -31,8 +31,8 @@ builder.Services.AddDbContext<DataContext>((serviceProvider, options) =>
 });
 
 builder.Services.AddScoped</*IFlipcardRepository, */FlipcardRepository>();
-builder.Services.AddSingleton<UserTrackingService>();
-
+builder.Services.AddSingleton<UserTrackingService<int>>();
+builder.Services.AddSingleton<UserTrackingService<string>>();
 
 
 

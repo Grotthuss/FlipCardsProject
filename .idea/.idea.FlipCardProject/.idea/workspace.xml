@@ -11,12 +11,10 @@
   <component name="ChangeListManager">
     <list default="true" id="b8ff5334-28f4-426b-9ab1-c49f562d17c1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FlipCardProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FlipCardProject/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/config/applicationhost.config" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/config/applicationhost.config" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/AddCardSet.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/AddCardSet.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/CardSetSelection.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/CardSetSelection.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/FlipCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/FlipCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/QuizFlipcard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/QuizFlipcard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FlipCardProject/Controllers/Home.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FlipCardProject/Controllers/Home.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FlipCardProject/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FlipCardProject/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FlipCardProject/Services/UserTrackingService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FlipCardProject/Services/UserTrackingService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TestProject1/TestProject1.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/TestProject1/TestProject1.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,7 +46,7 @@
     ".NET Project.test.executor": "Run",
     "3acec792-ed65-4ceb-a96b-be19a3f8faae.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "21-saule--fix-frontend-after-adding-user-id",
+    "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -142,6 +140,7 @@
       <workItem from="1731583355780" duration="7469000" />
       <workItem from="1731607856136" duration="101000" />
       <workItem from="1731607968459" duration="9529000" />
+      <workItem from="1732032057227" duration="269000" />
     </task>
     <servers />
   </component>
