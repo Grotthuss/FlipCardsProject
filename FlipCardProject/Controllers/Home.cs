@@ -15,9 +15,9 @@ namespace FlipCardProject.Controllers
     [ApiController]
     public class Home : ControllerBase
     {
-        private readonly UserTrackingService _userTrackingService;
+        private readonly UserTrackingService<int> _userTrackingService;
         private readonly FlipcardRepository _flipcardRepository;
-        public Home(UserTrackingService userTrackingService,FlipcardRepository flipcardRepository)
+        public Home(UserTrackingService<int> userTrackingService,FlipcardRepository flipcardRepository)
         {
             _flipcardRepository = flipcardRepository;
             _userTrackingService = userTrackingService;
