@@ -1,6 +1,8 @@
 using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 using FlipCardProject.Data;
+using FlipCardProject.Helpers;
+using FlipCardProject.Models;
 using FlipCardProject.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -31,11 +33,10 @@ builder.Services.AddDbContext<DataContext>((serviceProvider, options) =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseSettings"));
 });
 
-builder.Services.AddScoped</*IFlipcardRepository, */FlipcardRepository>();
+builder.Services.AddScoped<FlipcardRepository>();
 builder.Services.AddSingleton<UserTrackingService<int>>();
-builder.Services.AddSingleton<UserTrackingService<string>>();
 
-
+builder.Services.AddScoped(typeof(GenericValidator<>));
 
 var app = builder.Build();
 

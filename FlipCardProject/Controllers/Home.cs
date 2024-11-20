@@ -16,12 +16,15 @@ namespace FlipCardProject.Controllers
     [ApiController]
     public class Home : ControllerBase
     {
+        private readonly GenericValidator<FlipcardSet> _genericValidator;
         private readonly UserTrackingService<int> _userTrackingService;
         private readonly FlipcardRepository _flipcardRepository;
-        public Home(UserTrackingService<int> userTrackingService,FlipcardRepository flipcardRepository)
+        public Home(UserTrackingService<int> userTrackingService,FlipcardRepository flipcardRepository,GenericValidator<FlipcardSet> genericValidator)
         {
             _flipcardRepository = flipcardRepository;
             _userTrackingService = userTrackingService;
+            _genericValidator = genericValidator;
+            //_genericValidator.AddRule(set => !string.IsNullOrWhiteSpace(set.Name));
         }
 
         [HttpPost("{UserID}/StartGame")]
@@ -246,11 +249,10 @@ namespace FlipCardProject.Controllers
                 return BadRequest("Flipcard set cannot be null.");
             }
 
-            var setValidator = new GenericValidator<FlipcardSet>();
             
-            setValidator.AddRule(set => !string.IsNullOrWhiteSpace(set.Name)); 
+            _genericValidator.AddRule(set => !string.IsNullOrWhiteSpace(set.Name));
 
-            if (!setValidator.Validate(flipcardSet, out var errors))
+            if (!_genericValidator.Validate(flipcardSet, out var errors))
             {
                 Console.WriteLine($"Validation failed: {string.Join(", ", errors)}");
                 return BadRequest(string.Join("\n", errors));
