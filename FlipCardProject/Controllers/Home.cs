@@ -9,6 +9,7 @@ using FlipCardProject.Services;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using FlipCardProject.Helpers;
 namespace FlipCardProject.Controllers
 {
     [Route("api/[controller]")]
@@ -235,6 +236,28 @@ namespace FlipCardProject.Controllers
             System.IO.File.AppendAllText(logFilePath, $"{DateTime.Now}: {log.Message}\n");
         
             return Ok();
+        }
+        
+        [HttpPost("ValidateSet")]
+        public IActionResult ValidateSet([FromBody] FlipcardSet flipcardSet)
+        {
+            if (flipcardSet == null)
+            {
+                return BadRequest("Flipcard set cannot be null.");
+            }
+
+            var setValidator = new GenericValidator<FlipcardSet>();
+            
+            setValidator.AddRule(set => !string.IsNullOrWhiteSpace(set.Name)); 
+
+            if (!setValidator.Validate(flipcardSet, out var errors))
+            {
+                Console.WriteLine($"Validation failed: {string.Join(", ", errors)}");
+                return BadRequest(string.Join("\n", errors));
+            }
+
+            Console.WriteLine("Validation succeeded for Flipcard Set.");
+            return Ok("Flipcard Set is valid.");
         }
         
         public class ErrorLog

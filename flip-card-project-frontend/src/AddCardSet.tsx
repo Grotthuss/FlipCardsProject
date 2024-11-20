@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './AddCardSet.css';
 import { Errors } from "./errorEnums";
-import { EmptyCardSetNameException } from "./EmptyCardSetNameException";
 
 interface AddCardSetProps {
     onAdd: (id: number, setName: string) => void;
@@ -10,35 +9,37 @@ interface AddCardSetProps {
 const AddCardSet: React.FC<AddCardSetProps> = ({ onAdd }) => {
     const [setName, setSetName] = useState('');
     const [error, setError] = useState<string | null>(null);
-    const [styleChange, setStyleChange] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
 
-        if (!setName.trim()) {
-            try {
-                throw new EmptyCardSetNameException();
-            } catch (e) {
-                if (e instanceof EmptyCardSetNameException) {
-                    setError(e.message);
-                    setStyleChange(true);
-                    setTimeout(() => {
-                        setStyleChange(false);
-                    }, 2000);
-                }
-            }
-            return;
-        }
+        const validationRequestData = {
+            name: setName.trim(),
+            flipcardsList: []
+        };
 
         try {
+            const validationResponse = await fetch(`https://localhost:44372/api/Home/ValidateSet`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(validationRequestData),
+            });
+
+            if (!validationResponse.ok) {
+                const errorMessage = await validationResponse.text();
+                setError("Flipcard set must have a name");
+                return;
+            }
+
             const response = await fetch(`https://localhost:44372/api/Home/CreateFullSet`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    userId: 1,
                     name: setName.trim(),
                     flipcardsList: []
                 }),
@@ -46,7 +47,6 @@ const AddCardSet: React.FC<AddCardSetProps> = ({ onAdd }) => {
 
             if (!response.ok) {
                 const errorMessage = await response.text();
-                console.error("Error response:", errorMessage);
                 throw new Error(Errors.CREATE_SET + ` Server response: ${errorMessage}`);
             }
 
@@ -66,17 +66,13 @@ const AddCardSet: React.FC<AddCardSetProps> = ({ onAdd }) => {
     return (
         <form className="add-card-set-container" onSubmit={handleSubmit}>
             <h2>Add New Card Set</h2>
-
             <input
                 type="text"
                 placeholder="Enter card set name"
                 value={setName}
                 onChange={(e) => setSetName(e.target.value)}
-                className={styleChange ? 'input-error' : ''}
             />
-
             {error && <p className="error-message">{error}</p>}
-
             <button type="submit">Add Card Set</button>
         </form>
     );

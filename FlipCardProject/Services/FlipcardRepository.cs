@@ -48,7 +48,11 @@ public class FlipcardRepository //: IFlipcardRepository
 
     public async Task<FlipcardSet> AddFlipcardSetAsync(FlipcardSet flipcardSet)
     {
-        var transaction = await _context.Database.BeginTransactionAsync();
+        // Only start a transaction if the database provider supports it (InMemory database used for entity tests doesnt support transactions)
+        var transaction = _context.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory" 
+            ? await _context.Database.BeginTransactionAsync()
+            : null;
+        
         try
         {
             var t = await _context.Users.FindAsync(1);
@@ -66,13 +70,20 @@ public class FlipcardRepository //: IFlipcardRepository
             _context.Entry(flipcardSet).State = EntityState.Added;
             //await t.FlipCardSets.AddAsync(flipcardSet);
             await _context.SaveChangesAsync();
-            await transaction.CommitAsync();
+            if (transaction != null)
+            {
+                await transaction.CommitAsync();
+            }
             return flipcardSet;
         }
         catch (Exception e)
         {
-            transaction.Rollback();
-            throw e;
+            // Only rollback if transaction is not null
+            if (transaction != null)
+            {
+                await transaction.RollbackAsync();
+            }
+            throw;
         }
         
         
@@ -80,7 +91,9 @@ public class FlipcardRepository //: IFlipcardRepository
 
     public async Task AddFlipcardAsync(int setId, Flipcard flipcard)
     {
-        var transaction = await _context.Database.BeginTransactionAsync();
+        var transaction = _context.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory" 
+            ? await _context.Database.BeginTransactionAsync()
+            : null;
 
         try
         {
@@ -105,18 +118,24 @@ public class FlipcardRepository //: IFlipcardRepository
             var t_card = set.FlipcardsList.Last();
             _context.Entry(t_card).State = EntityState.Added;
             await _context.SaveChangesAsync();
-            await transaction.CommitAsync();
+            if (transaction != null) await transaction.CommitAsync();
         }
         catch (Exception e)
         {
-            transaction.Rollback();
+            if (transaction != null)
+            {
+                transaction.Rollback();
+            }
             throw;
         }
     }
 
     public async Task<FlipcardSet> UpdateFlipcardSetAsync(FlipcardSet flipcardSet)
     {
-        var transaction = await _context.Database.BeginTransactionAsync();
+        var transaction = _context.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory" 
+            ? await _context.Database.BeginTransactionAsync()
+            : null;
+        
         try
         {
             var t = await _context.Users.FindAsync(1);
@@ -169,19 +188,21 @@ public class FlipcardRepository //: IFlipcardRepository
             }
 
             await _context.SaveChangesAsync();
-            await transaction.CommitAsync();
+            if (transaction != null) await transaction.CommitAsync();
             return existingSet;
         }
         catch (Exception e)
         {
-            transaction.Rollback();
+            if (transaction != null) transaction.Rollback();
             throw;
         }
     }
 
     public async Task UpdateFlipcardAsync(int setId, Flipcard flipcard)
     {
-        var transaction = await _context.Database.BeginTransactionAsync();
+        var transaction = _context.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory" 
+            ? await _context.Database.BeginTransactionAsync()
+            : null;
 
         try
         {
@@ -212,18 +233,20 @@ public class FlipcardRepository //: IFlipcardRepository
                 existingCard.State = flipcard.State;   
             }
             await _context.SaveChangesAsync();
-            await transaction.CommitAsync();
+            if (transaction != null) await transaction.CommitAsync();
 
         }
         catch (Exception e)
         {
-            transaction.Rollback();
+            if (transaction != null) transaction.Rollback();
             throw;
         }
     }
     public async Task DeleteFlipcardSetAsync(int setId)
     {
-        var transaction = await _context.Database.BeginTransactionAsync();
+        var transaction = _context.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory" 
+            ? await _context.Database.BeginTransactionAsync()
+            : null;
 
         try
         {   
@@ -241,19 +264,22 @@ public class FlipcardRepository //: IFlipcardRepository
 
             _context.Remove(set);
             await _context.SaveChangesAsync();
-            await transaction.CommitAsync();
+            if (transaction != null) await transaction.CommitAsync();
 
         }
         catch (Exception e)
         {
-            transaction.Rollback();
+            if (transaction != null) transaction.Rollback();
             throw;
         }
     }
 
-    public async Task DeleteFlipcardAsync(int setId,int cardId)
+    public async Task DeleteFlipcardAsync(int setId, int cardId)
     {
-        var transaction = await _context.Database.BeginTransactionAsync();
+        var transaction = _context.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory" 
+            ? await _context.Database.BeginTransactionAsync()
+            : null;
+        
         try
         {
             var t = await _context.Users.FindAsync(1);
@@ -276,11 +302,11 @@ public class FlipcardRepository //: IFlipcardRepository
             }
             _context.Remove(card);
             await _context.SaveChangesAsync();
-            await transaction.CommitAsync();
+            if (transaction != null) await transaction.CommitAsync();
         }
         catch (Exception e)
         {
-            transaction.Rollback();
+            if (transaction != null) transaction.Rollback();
             throw;
         }
     }

@@ -1,4 +1,5 @@
 using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
 using FlipCardProject.Data;
 using FlipCardProject.Services;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddControllers(); 
 builder.Services.AddCors(options =>
-{
+{ 
     options.AddPolicy("AllowAll",
         builder =>
         {
