@@ -25,6 +25,21 @@ namespace FlipCardProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Userst",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    whatevz = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Userst", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "FlipCardSets",
                 columns: table => new
                 {
@@ -79,6 +94,9 @@ namespace FlipCardProject.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Flipcard");
+
+            migrationBuilder.DropTable(
+                name: "Userst");
 
             migrationBuilder.DropTable(
                 name: "FlipCardSets");
