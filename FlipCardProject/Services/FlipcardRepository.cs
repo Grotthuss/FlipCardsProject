@@ -1,9 +1,11 @@
 using System.Security.Cryptography.X509Certificates;
 using FlipCardProject.Data;
-using FlipCardProject.Models;
-using Microsoft.EntityFrameworkCore;
+using FlipCardProject.Exceptions;
+using FlipCardProject.logs;
 
-namespace FlipCardProject.Services;
+namespace FlipCardProject.Services;using Microsoft.EntityFrameworkCore;
+
+using FlipCardProject.Models;
 
 /*
 public interface IFlipcardRepository
@@ -58,7 +60,11 @@ public class FlipcardRepository //: IFlipcardRepository
             var t = await _context.Users.FindAsync(1);
             if (t == null)
             {
-                throw new NullReferenceException("User not found");
+                //throw new NullReferenceException("User not found");
+                //throw new UserNotFound("no user found");
+                var exception = new UserNotFound("User not found.");
+                ErrorLogger.LogError(exception);
+                throw exception;
             }
             flipcardSet.Id = 0;
             foreach (var card in flipcardSet.FlipcardsList)
@@ -78,7 +84,7 @@ public class FlipcardRepository //: IFlipcardRepository
         }
         catch (Exception e)
         {
-            // Only rollback if transaction is not null
+           
             if (transaction != null)
             {
                 await transaction.RollbackAsync();
@@ -101,10 +107,13 @@ public class FlipcardRepository //: IFlipcardRepository
 
             if (t == null)
             {
-                throw new NullReferenceException("User not found");
+                var exception = new UserNotFound("User not found.");
+                ErrorLogger.LogError(exception);
+                throw exception;
+               
             }
 
-            var set = t.FlipcardSets.FirstOrDefault(x => x.Id == setId);//await _context.FlipCardSets.FindAsync(setId);
+            var set = t.FlipcardSets.FirstOrDefault(x => x.Id == setId);
             if (set == null)
             {
                 throw new NullReferenceException();
@@ -141,7 +150,10 @@ public class FlipcardRepository //: IFlipcardRepository
             var t = await _context.Users.FindAsync(1);
             if (t == null)
             {
-                throw new NullReferenceException("User not found");
+                var exception = new UserNotFound("User not found.");
+                ErrorLogger.LogError(exception);
+                throw exception;
+                //throw new NullReferenceException("User not found");
             }
 
             var existingSet = t.FlipcardSets.FirstOrDefault(x => x.Id == flipcardSet.Id);//await _context.FlipCardSets.FindAsync(flipcardSet.Id);
@@ -209,7 +221,10 @@ public class FlipcardRepository //: IFlipcardRepository
             var t = await _context.Users.FindAsync(1);
             if (t == null)
             {
-                throw new NullReferenceException("User not found");
+                var exception = new UserNotFound("User not found.");
+                ErrorLogger.LogError(exception);
+                throw exception;
+                //throw new NullReferenceException("User not found");
             }
 
             var set = t.FlipcardSets.FirstOrDefault(x => x.Id == setId);//await _context.FlipCardSets.FindAsync(setId);
@@ -253,7 +268,10 @@ public class FlipcardRepository //: IFlipcardRepository
             var t = await _context.Users.FindAsync(1);
             if (t == null)
             {
-                throw new NullReferenceException("User not found");
+                var exception = new UserNotFound("User not found.");
+                ErrorLogger.LogError(exception);
+                throw exception;
+                //throw new NullReferenceException("User not found");
             }
 
             var set = t.FlipcardSets.FirstOrDefault(x => x.Id == setId);//await _context.FlipCardSets.FindAsync(setId);
@@ -286,7 +304,10 @@ public class FlipcardRepository //: IFlipcardRepository
 
             if (t == null)
             {
-                throw new NullReferenceException("no user found");
+                var exception = new UserNotFound("User not found.");
+                ErrorLogger.LogError(exception);
+                throw exception;
+                //throw new NullReferenceException("no user found");
             }
 
             var set = t.FlipcardSets.FirstOrDefault(x => x.Id == setId);//await _context.FlipCardSets.FindAsync(setId);

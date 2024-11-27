@@ -1,4 +1,5 @@
 using FlipCardProject.Records;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace TestProject1;
 using FlipCardProject.Models;
@@ -6,15 +7,15 @@ using Xunit;
 using FlipCardProject.Extensions;
 using FlipCardProject.Services;
 
-public class UnitTests
+public class UnitTests : IClassFixture<TestFixture>
 {
     private readonly UserTrackingService<int> _tracking;
     private readonly FlipcardSetValidator _validator;
     
-    public UnitTests()
+    public UnitTests(TestFixture fixture)
     {
-        _tracking = new UserTrackingService<int>();
-        _validator = new FlipcardSetValidator();
+        _tracking = fixture.ServiceProvider.GetRequiredService<UserTrackingService<int>>();
+        _validator = fixture.ServiceProvider.GetRequiredService<FlipcardSetValidator>();
     }
     public class CardShuffleTests
     {
