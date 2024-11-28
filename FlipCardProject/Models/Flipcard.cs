@@ -14,11 +14,9 @@ public sealed record Flipcard : IEquatable<Flipcard>
    
     private string _concept;
     private string _mnemonic;
-    private FlipcardState _state;
+    //private FlipcardState _state;
     private string _question;
-
-  //  public int FlipcardSetId { get; set; }
-  //  public int UserId { get; set; }
+    
     
     public int Id
     {
@@ -45,22 +43,22 @@ public sealed record Flipcard : IEquatable<Flipcard>
         get { return _mnemonic; }
         set { _mnemonic = value; }
     }
-    
-   
-    public FlipcardState State
+
+    /*public FlipcardState State
     {
         get { return _state; }
         set { _state = value; }
-    }
+    }*/
+    
 
-    public Flipcard(string question,string concept, string mnemonic, FlipcardState state)
+    public Flipcard(string question,string concept, string mnemonic)
     {
         _question = question;
         _concept = concept;
         _mnemonic = mnemonic;
-        _state = state;
+       // _state = state;
       //  UserId = 0;
-      //  FlipcardSetId = 0;
+    
     }
 
     
@@ -68,7 +66,7 @@ public sealed record Flipcard : IEquatable<Flipcard>
     {
         if (other is null) return false;
         return _mnemonic == other._mnemonic &&
-               _state == other._state &&
+               //_state == other._state &&
                _question == other._question &&
                _concept == other._concept;
     }
@@ -80,6 +78,6 @@ public sealed record Flipcard : IEquatable<Flipcard>
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(_mnemonic, _state, _question, _concept);
+        return HashCode.Combine(_mnemonic, /*_state,*/ _question, _concept);
     }
 }

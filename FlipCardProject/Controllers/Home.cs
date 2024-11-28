@@ -78,7 +78,7 @@ namespace FlipCardProject.Controllers
         
         
         
-        [HttpGet("{setId}/CardsOfAnotherState")]
+        /*[HttpGet("{setId}/CardsOfAnotherState")]
         public async Task<ActionResult<IEnumerable<FlipcardSet>>> GetCardsOfSomeState(int setId, [FromQuery]  FlipcardState state)
         {
             var set = await _flipcardRepository.GetFlipcardSetByIdAsync(setId);
@@ -89,7 +89,7 @@ namespace FlipCardProject.Controllers
             
             var cards = set.FlipcardsList.FindAll(x => x.State == state);
             return Ok(cards);
-        }
+        }*/
         
 
         [HttpGet("{setId}/ShuffleCards")]
