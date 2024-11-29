@@ -23,6 +23,8 @@ public class DataContext : DbContext
             entity.Property(u => u.Id).ValueGeneratedOnAdd().IsRequired();
             entity.HasKey(u => u.Id);
             entity.Property(u => u.Name).IsRequired().HasMaxLength(100);
+            entity.Property(u => u.Email).IsRequired().HasMaxLength(100);
+            entity.Property(u => u.Password).IsRequired().HasMaxLength(100);
             entity.OwnsMany(u => u.FlipcardSets, s =>
             {
                 s.Property(p => p.Id).ValueGeneratedOnAdd();
@@ -38,6 +40,7 @@ public class DataContext : DbContext
                     a.Property(f => f.Concept).HasMaxLength(300).IsRequired();
                     a.Property(f => f.Question).HasMaxLength(300).IsRequired();
                     a.Property(f => f.Mnemonic).HasMaxLength(300).IsRequired();
+                    
                     /*a.Property(f => f.State)
                         .IsRequired()
                         .HasConversion(

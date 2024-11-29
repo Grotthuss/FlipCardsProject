@@ -17,17 +17,72 @@ public class FlipcardRepository
         _context = context;
     }
 
-    public async Task<List<FlipcardSet>> GetAllFlipcardSetsAsync()
+
+    public async Task<User> CreateAccount(string name, string email, string password)
+    {
+        if (await _context.Users.AnyAsync(u => u.Email == email))
+        {
+            return null;
+        }
+
+        User user = new User
+        {   
+            Id = 0,
+            Email = email,
+            Password = password,
+            Name = name,
+            FlipcardSets = new List<FlipcardSet>()
+        };
+        await _context.Users.AddAsync(user);
+        await _context.SaveChangesAsync();
+        return user;
+    }
+
+    public async Task<int> LoginUser(string email, string password)
+    {
+        User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        if (user == null)
+        {
+            return 0;
+        }
+
+        if (!(user.Password == password))
+        {
+            return 0;
+        }
+        return user.Id;
+    }
+
+    public async Task DeleteUser(int userId)
+    {
+        User user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+        if (user == null)
+        {
+            
+        }
+        else
+        {
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            
+        }
+    }
+    
+    public async Task<List<FlipcardSet>> GetAllFlipcardSetsAsync(int userId)
     {   
-        var t = await _context.Users.FindAsync(1);
+        var t = await _context.Users.FindAsync(userId);
         
          return t.FlipcardSets.ToList();
     }
 
-    public async Task<FlipcardSet> GetFlipcardSetByIdAsync(int setId)
+    public async Task<FlipcardSet> GetFlipcardSetByIdAsync(int userId,int setId)
     {
-        var t = await _context.Users.FindAsync(1);
-        
+        var t = await _context.Users.FindAsync(userId);
+        if (t == null)
+        {
+            return null;
+        }
      
         return t.FlipcardSets.FirstOrDefault(x => x.Id == setId);
     }
@@ -40,7 +95,7 @@ public class FlipcardRepository
         
         try
         {
-            var t = await _context.Users.FindAsync(1);
+            var t = await _context.Users.FindAsync(flipcardSet.UserId);
             if (t == null)
             {
                 
@@ -77,7 +132,7 @@ public class FlipcardRepository
         
     }
 
-    public async Task AddFlipcardAsync(int setId, Flipcard flipcard)
+    public async Task AddFlipcardAsync(int userId,int setId, Flipcard flipcard)
     {
         var transaction = _context.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory" 
             ? await _context.Database.BeginTransactionAsync()
@@ -85,7 +140,7 @@ public class FlipcardRepository
 
         try
         {
-            var t = await _context.Users.FindAsync(1);
+            var t = await _context.Users.FindAsync(userId);
 
             if (t == null)
             {
@@ -129,7 +184,7 @@ public class FlipcardRepository
         
         try
         {
-            var t = await _context.Users.FindAsync(1);
+            var t = await _context.Users.FindAsync(flipcardSet.UserId);
             if (t == null)
             {
                 var exception = new UserNotFound("User not found.");
@@ -163,7 +218,7 @@ public class FlipcardRepository
                 foreach (var updatedCard in flipcardSet.FlipcardsList)
                 {
                     var existingCard = existingSet.FlipcardsList.FirstOrDefault(c => c.Id == updatedCard.Id);
-                    if (existingCard != null)
+                    if ((existingCard != null) && (updatedCard.Id != 0) )
                     {
 
                         existingCard.Question = updatedCard.Question;
@@ -192,7 +247,7 @@ public class FlipcardRepository
         }
     }
 
-    public async Task UpdateFlipcardAsync(int setId, Flipcard flipcard)
+    public async Task UpdateFlipcardAsync(int userId,int setId, Flipcard flipcard)
     {
         var transaction = _context.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory" 
             ? await _context.Database.BeginTransactionAsync()
@@ -200,7 +255,7 @@ public class FlipcardRepository
 
         try
         {
-            var t = await _context.Users.FindAsync(1);
+            var t = await _context.Users.FindAsync(userId);
             if (t == null)
             {
                 var exception = new UserNotFound("User not found.");
@@ -239,7 +294,7 @@ public class FlipcardRepository
             throw;
         }
     }
-    public async Task DeleteFlipcardSetAsync(int setId)
+    public async Task DeleteFlipcardSetAsync(int userID,int setId)
     {
         var transaction = _context.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory" 
             ? await _context.Database.BeginTransactionAsync()
@@ -247,7 +302,7 @@ public class FlipcardRepository
 
         try
         {   
-            var t = await _context.Users.FindAsync(1);
+            var t = await _context.Users.FindAsync(userID);
             if (t == null)
             {
                 var exception = new UserNotFound("User not found.");
@@ -274,7 +329,7 @@ public class FlipcardRepository
         }
     }
 
-    public async Task DeleteFlipcardAsync(int setId, int cardId)
+    public async Task DeleteFlipcardAsync(int userId,int setId, int cardId)
     {
         var transaction = _context.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory" 
             ? await _context.Database.BeginTransactionAsync()
@@ -282,7 +337,7 @@ public class FlipcardRepository
         
         try
         {
-            var t = await _context.Users.FindAsync(1);
+            var t = await _context.Users.FindAsync(userId);
 
             if (t == null)
             {
