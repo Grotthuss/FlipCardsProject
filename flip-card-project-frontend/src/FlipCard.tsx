@@ -9,9 +9,6 @@ interface FlipCardData {
     question: string;
     concept: string;
     mnemonic: string;
-    state: {
-        _state: number;
-    };
 }
 
 interface CardSet {
@@ -28,47 +25,21 @@ const FlipCard: React.FC = () => {
     const [loading, setLoading] = React.useState<boolean>(true);
     const [error, setError] = React.useState<string | null>(null);
 
-    /*
-    const shuffleCards = async () => {
-        try {
-            const response = await fetch(`https://localhost:44372/api/Home/${id}/ShuffleCards`, {
-                method: 'GET',
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to shuffle cards.');
-            }
-
-            const data = await response.json();
-            if (data && Array.isArray(data.flipcardsList)) {
-                setCards(data.flipcardsList);
-            } else {
-                setError(Errors.FORMAT + JSON.stringify(data));
-            }
-        } catch (error) {
-            setError(`Shuffle Error: ${(error as Error).message}`);
-        }
-    };
-    */
-
-    const handleFlip = (index: number) => {
-        const flipCard = document.getElementById(`flipCard-${index}`);
-        if (flipCard) {
-            flipCard.classList.toggle('flipped');
-        }
-    };
-
     const fetchCards = async () => {
         if (!id) {
             setError(Errors.TITLE);
             setLoading(false);
             return;
         }
+
         try {
-            const response = await fetch(`https://localhost:44372/api/Home/${id}/GetCardSet`);
+            const userId = 1;
+            const response = await fetch(`https://localhost:44372/api/Home/${userId}/${id}/GetCardSet`);
+
             if (!response.ok) {
                 throw new Error(Errors.NETWORK);
             }
+
             const data: CardSet = await response.json();
 
             if (data && Array.isArray(data.flipcardsList)) {
@@ -88,17 +59,15 @@ const FlipCard: React.FC = () => {
     }, [id]);
 
     const handleAddFlipCard = async (question: string, concept: string, mnemonic: string) => {
+        const userId = 1;
         const newCard: Omit<FlipCardData, 'id'> = {
             question: question,
             concept: concept,
             mnemonic: mnemonic,
-            state: {
-                _state: 0
-            }
         };
 
         try {
-            const response = await fetch(`https://localhost:44372/api/Home/${id}/CreateCard`, {
+            const response = await fetch(`https://localhost:44372/api/Home/${userId}/${id}/CreateCard`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newCard),
@@ -118,12 +87,24 @@ const FlipCard: React.FC = () => {
         }
     };
 
+    const handleFlip = (index: number) => {
+        const flipCard = document.getElementById(`flipCard-${index}`);
+        if (flipCard) {
+            flipCard.classList.toggle('flipped');
+        }
+    };
+
     const goToQuiz = () => {
         if (cards.length === 0) {
             setError("No cards available for the quiz.");
             return;
         }
-        navigate(`/quizcard/${id}`, { state: { cards } });
+        const userId = 1;
+        navigate(`/quizcard/${userId}/${id}`);
+    };
+
+    const goBack = () => {
+        navigate("/");
     };
 
     if (loading) {
@@ -160,11 +141,9 @@ const FlipCard: React.FC = () => {
                     <div>No cards available</div>
                 )}
             </div>
-            <AddFlipCard onAddFlipCard={handleAddFlipCard} />
-
-            {/* <button onClick={shuffleCards} className="shuffle-button">Shuffle Cards</button> */}
-
+            <AddFlipCard onAddFlipCard={handleAddFlipCard}/>
             <button onClick={goToQuiz}>Go to Quiz</button>
+            <button onClick={goBack}>Back to Card Sets</button>
         </div>
     );
 };

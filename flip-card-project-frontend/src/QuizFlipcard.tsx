@@ -1,14 +1,25 @@
 import React from 'react';
 import './QuizFlipcard.css';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Errors } from "./errorEnums";
 
-interface FlipCardData { id: number; question: string; concept: string; mnemonic: string; }
+interface FlipCardData {
+    id: number;
+    question: string;
+    concept: string;
+    mnemonic: string;
+}
 
-interface CardSet { id: number; userId: number; name: string; flipcardsList: FlipCardData[]; }
+interface CardSet {
+    id: number;
+    userId: number;
+    name: string;
+    flipcardsList: FlipCardData[];
+}
 
 const QuizFlipCard: React.FC = () => {
-    const { id } = useParams<{ id: string }>();
+    const { setId } = useParams<{ setId: string }>();
+    const navigate = useNavigate();
     const [cards, setCards] = React.useState<FlipCardData[]>([]);
     const [loading, setLoading] = React.useState<boolean>(true);
     const [error, setError] = React.useState<string | null>(null);
@@ -17,18 +28,18 @@ const QuizFlipCard: React.FC = () => {
     const [score, setScore] = React.useState<number>(0);
     const [feedback, setFeedback] = React.useState<string | null>(null);
     const [flipped, setFlipped] = React.useState<boolean>(false);
-    const [userId, setUserId] = React.useState<number | null>(null);
+    const [userId] = React.useState<number>(1);
     const [activePlayers, setActivePlayers] = React.useState<number>(0);
 
     const fetchCards = async () => {
-        if (!id) {
+        if (!setId) {
             setError(Errors.TITLE);
             setLoading(false);
             return;
         }
 
         try {
-            const response = await fetch(`https://localhost:44372/api/Home/${id}/GetCardSet`);
+            const response = await fetch(`https://localhost:44372/api/Home/${userId}/${setId}/GetCardSet`);
             if (!response.ok) {
                 throw new Error(Errors.NETWORK);
             }
@@ -36,7 +47,6 @@ const QuizFlipCard: React.FC = () => {
 
             if (data && Array.isArray(data.flipcardsList)) {
                 setCards(data.flipcardsList);
-                setUserId(data.userId);
             } else {
                 setError(Errors.FORMAT + JSON.stringify(data));
             }
@@ -61,7 +71,6 @@ const QuizFlipCard: React.FC = () => {
     };
 
     const startGame = async () => {
-        if (userId === null) return;
         try {
             const response = await fetch(`https://localhost:44372/api/Home/${userId}/StartGame`, {
                 method: 'POST',
@@ -76,7 +85,6 @@ const QuizFlipCard: React.FC = () => {
     };
 
     const endGame = async () => {
-        if (userId === null) return;
         try {
             const response = await fetch(`https://localhost:44372/api/Home/${userId}/EndGame`, {
                 method: 'POST',
@@ -92,16 +100,14 @@ const QuizFlipCard: React.FC = () => {
 
     React.useEffect(() => {
         fetchCards();
-    }, [id]);
+    }, [setId, userId]);
 
     React.useEffect(() => {
-        if (userId !== null) {
-            startGame();
+        startGame();
 
-            return () => {
-                endGame();
-            };
-        }
+        return () => {
+            endGame();
+        };
     }, [userId]);
 
     React.useEffect(() => {
@@ -143,6 +149,10 @@ const QuizFlipCard: React.FC = () => {
         }
     };
 
+    const goBackToFlipCards = () => {
+        navigate(`/card-set/${setId}`);
+    };
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -155,9 +165,9 @@ const QuizFlipCard: React.FC = () => {
 
     return (
         <div className="flip-card-page">
-            <div className="active-players-count">
+            {/*<div className="active-players-count">
                 Active Players: {activePlayers}
-            </div>
+            </div>*/}
 
             <h2>Quiz Score: {score} / {cards.length}</h2>
             <div className="cards-container">
@@ -182,7 +192,8 @@ const QuizFlipCard: React.FC = () => {
                                 placeholder="Your answer here"
                                 disabled={flipped || isQuizFinished}
                             />
-                            <button onClick={handleAnswerSubmit} disabled={flipped || isQuizFinished}>Submit Answer</button>
+                            <button onClick={handleAnswerSubmit} disabled={flipped || isQuizFinished}>Submit Answer
+                            </button>
                         </div>
                         <div className="feedback-message-container">
                             {feedback && <div className="feedback-message">{feedback}</div>}
@@ -197,6 +208,7 @@ const QuizFlipCard: React.FC = () => {
                     <div className="feedback-message">Quiz finished! Your score: {score} / {cards.length}</div>
                 )}
             </div>
+            <button onClick={goBackToFlipCards}>Back to Flip Cards</button>
         </div>
     );
 };
