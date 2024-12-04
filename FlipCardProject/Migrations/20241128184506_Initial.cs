@@ -35,7 +35,7 @@ namespace FlipCardProject.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FlipCardSets", x => new { x.UserId, x.Id });
+                    table.PrimaryKey("PK_FlipCardSets", x => x.Id);
                     table.ForeignKey(
                         name: "FK_FlipCardSets_Users_UserId",
                         column: x => x.UserId,
@@ -50,28 +50,32 @@ namespace FlipCardProject.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Question = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
-                    Concept = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
-                    Mnemonic = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
+                    Question = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Concept = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Mnemonic = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     State = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SetId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    SetId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Flipcard", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Flipcard_FlipCardSets_UserId_SetId",
-                        columns: x => new { x.UserId, x.SetId },
+                        name: "FK_Flipcard_FlipCardSets_SetId",
+                        column: x => x.SetId,
                         principalTable: "FlipCardSets",
-                        principalColumns: new[] { "UserId", "Id" },
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Flipcard_UserId_SetId",
+                name: "IX_Flipcard_SetId",
                 table: "Flipcard",
-                columns: new[] { "UserId", "SetId" });
+                column: "SetId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FlipCardSets_UserId",
+                table: "FlipCardSets",
+                column: "UserId");
         }
 
         /// <inheritdoc />

@@ -57,7 +57,7 @@ public class FlipcardSet : IEquatable<FlipcardSet>
 
     public void AddFlipcard(FlipcardState state, string question = "No question", string concept = "No concept", string mnemonic = "No mnemonic")
     {
-        Flipcard flipcard = new Flipcard(question: question, concept: concept, mnemonic: mnemonic, state: state);
+        Flipcard flipcard = new Flipcard(question: question, concept: concept, mnemonic: mnemonic);
         _flipcards_list.Add(flipcard);
     }
     

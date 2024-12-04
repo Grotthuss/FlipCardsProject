@@ -27,6 +27,41 @@ namespace FlipCardProject.Controllers
             //_genericValidator.AddRule(set => !string.IsNullOrWhiteSpace(set.Name));
         }
 
+
+        [HttpGet("{email}/{password}/Login")]
+        public async Task<ActionResult<int>> Login(string email, string password)
+        {
+            //_userTrackingService.Login(email, password);
+            var t = await _flipcardRepository.LoginUser(email, password);
+            if (t == 0)
+            {
+                return NotFound();
+            }
+            return Ok(t);
+            
+        }
+
+        [HttpPost("{name}/{email}/{password}/Register")]
+
+        public async Task<ActionResult<User>> Register(string name, string email, string password)
+        {
+            var t = await _flipcardRepository.CreateAccount(name, email, password);
+            if (t == null)
+            {
+                return BadRequest();
+            }
+            
+            return Ok(t);
+            
+        }
+
+        [HttpDelete("{userId}/DeleteUser")]
+        public async Task DeleteUser(int userId)
+        {
+             await _flipcardRepository.DeleteUser(userId);
+        }
+        
+        
         [HttpPost("{UserID}/StartGame")]
         public IActionResult StartGame(int UserID)
         {
@@ -54,19 +89,19 @@ namespace FlipCardProject.Controllers
             var players = _userTrackingService.GetActivePlayers();
             return Ok(players);
         }
-        [HttpGet("GetAllSets")]
-        public async Task<ActionResult<IEnumerable<FlipcardSet>>> GetCardSets()
+        [HttpGet("{userId}/GetAllSets")]
+        public async Task<ActionResult<IEnumerable<FlipcardSet>>> GetCardSets(int userId)
         {
            
-            return Ok(await _flipcardRepository.GetAllFlipcardSetsAsync());
+            return Ok(await _flipcardRepository.GetAllFlipcardSetsAsync(userId));
         }
         
 
-        [HttpGet("{setId}/GetCardSet")]
-        public async Task<ActionResult<IEnumerable<FlipcardSet>>> GetSet(int setId)
+        [HttpGet("{userId}/{setId}/GetCardSet")]
+        public async Task<ActionResult<IEnumerable<FlipcardSet>>> GetSet(int userId,int setId)
         {
             
-            var set = await _flipcardRepository.GetFlipcardSetByIdAsync(setId);
+            var set = await _flipcardRepository.GetFlipcardSetByIdAsync(userId,setId);
             if (set == null)
             {
                 return NotFound();
@@ -78,7 +113,7 @@ namespace FlipCardProject.Controllers
         
         
         
-        [HttpGet("{setId}/CardsOfAnotherState")]
+        /*[HttpGet("{setId}/CardsOfAnotherState")]
         public async Task<ActionResult<IEnumerable<FlipcardSet>>> GetCardsOfSomeState(int setId, [FromQuery]  FlipcardState state)
         {
             var set = await _flipcardRepository.GetFlipcardSetByIdAsync(setId);
@@ -89,15 +124,15 @@ namespace FlipCardProject.Controllers
             
             var cards = set.FlipcardsList.FindAll(x => x.State == state);
             return Ok(cards);
-        }
+        }*/
         
 
-        [HttpGet("{setId}/ShuffleCards")]
+        [HttpGet("{userId}/{setId}/ShuffleCards")]
 
-        public async Task<ActionResult<List<Flipcard>>> GetShuffleCards(int setId)
+        public async Task<ActionResult<List<Flipcard>>> GetShuffleCards(int userId,int setId)
         {
            
-            var set = await _flipcardRepository.GetFlipcardSetByIdAsync(setId);
+            var set = await _flipcardRepository.GetFlipcardSetByIdAsync(userId,setId);
             if (set == null)
             {
                 return NotFound();
@@ -130,15 +165,15 @@ namespace FlipCardProject.Controllers
         
         
 
-        [HttpPost("{setId}/CreateCard", Name = "PostCard")]
-        public async Task<ActionResult<Flipcard>> PostCard(int setId, [FromBody] Flipcard card)
+        [HttpPost("{userId}/{setId}/CreateCard", Name = "PostCard")]
+        public async Task<ActionResult<Flipcard>> PostCard(int userId,int setId, [FromBody] Flipcard card)
         {
            
 
             try
             {
                 
-                await _flipcardRepository.AddFlipcardAsync(setId, card);
+                await _flipcardRepository.AddFlipcardAsync(userId,setId, card);
                 return Ok();
                 
             }
@@ -170,15 +205,15 @@ namespace FlipCardProject.Controllers
         }
         
 
-        [HttpPut("{setId}/UpdateorAddCard", Name = "PutCard")]
-        public async Task<ActionResult<Flipcard>> PutCard(int setId,[FromBody] Flipcard card)
+        [HttpPut("{userId}/{setId}/UpdateorAddCard", Name = "PutCard")]
+        public async Task<ActionResult<Flipcard>> PutCard(int userId,int setId,[FromBody] Flipcard card)
         {
             
 
             try
             {
                 
-                await _flipcardRepository.UpdateFlipcardAsync(setId,card);
+                await _flipcardRepository.UpdateFlipcardAsync(userId,setId,card);
                 return Ok();
             }
             catch (Exception e)
@@ -189,14 +224,14 @@ namespace FlipCardProject.Controllers
             
         }
         
-        [HttpDelete("{setId}/DeleteSet")]
-        public async Task<ActionResult<FlipcardSet>> DeleteSet(int setId)
+        [HttpDelete("{userId}/{setId}/DeleteSet")]
+        public async Task<ActionResult<FlipcardSet>> DeleteSet(int userId,int setId)
         {
            
 
             try
             {
-                await _flipcardRepository.DeleteFlipcardSetAsync(setId);
+                await _flipcardRepository.DeleteFlipcardSetAsync(userId,setId);
                 return Ok();
 
 
@@ -210,15 +245,15 @@ namespace FlipCardProject.Controllers
         
         
         
-        [HttpDelete("{setId}/{Id}/DeleteCard", Name = "DeleteCard")]
-        public async Task<ActionResult<FlipcardSet>> DeleteCard(int setId, int Id)
+        [HttpDelete("{userId},{setId}/{Id}/DeleteCard", Name = "DeleteCard")]
+        public async Task<ActionResult<FlipcardSet>> DeleteCard(int userId,int setId, int Id)
         {
             
 
             try
             {
                 
-                await _flipcardRepository.DeleteFlipcardAsync(setId, Id);
+                await _flipcardRepository.DeleteFlipcardAsync(userId,setId, Id);
                 return Ok();
             }
             catch (Exception e)
