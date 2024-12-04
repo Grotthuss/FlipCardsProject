@@ -11,11 +11,7 @@
   <component name="ChangeListManager">
     <list default="true" id="b8ff5334-28f4-426b-9ab1-c49f562d17c1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FlipCardProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FlipCardProject/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/config/applicationhost.config" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/config/applicationhost.config" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FlipCardProject.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/FlipCardProject.sln.DotSettings.user" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/AddCardSet.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/AddCardSet.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/CardSetSelection.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/CardSetSelection.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FlipCardProject/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/FlipCardProject/appsettings.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/FlipCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/FlipCard.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/QuizFlipcard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/QuizFlipcard.tsx" afterDir="false" />
     </list>
@@ -146,7 +142,7 @@
       <workItem from="1732032057227" duration="269000" />
       <workItem from="1732105664266" duration="5280000" />
       <workItem from="1732112156017" duration="8106000" />
-      <workItem from="1733305094474" duration="4090000" />
+      <workItem from="1733305094474" duration="5001000" />
     </task>
     <servers />
   </component>

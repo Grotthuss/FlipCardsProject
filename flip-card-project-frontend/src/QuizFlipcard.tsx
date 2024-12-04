@@ -1,6 +1,6 @@
 import React from 'react';
 import './QuizFlipcard.css';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Errors } from "./errorEnums";
 
 interface FlipCardData {
@@ -19,6 +19,7 @@ interface CardSet {
 
 const QuizFlipCard: React.FC = () => {
     const { setId } = useParams<{ setId: string }>();
+    const navigate = useNavigate();
     const [cards, setCards] = React.useState<FlipCardData[]>([]);
     const [loading, setLoading] = React.useState<boolean>(true);
     const [error, setError] = React.useState<string | null>(null);
@@ -99,7 +100,7 @@ const QuizFlipCard: React.FC = () => {
 
     React.useEffect(() => {
         fetchCards();
-    }, [setId, userId]); 
+    }, [setId, userId]);
 
     React.useEffect(() => {
         startGame();
@@ -148,6 +149,10 @@ const QuizFlipCard: React.FC = () => {
         }
     };
 
+    const goBackToFlipCards = () => {
+        navigate(`/card-set/${setId}`);
+    };
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -187,7 +192,8 @@ const QuizFlipCard: React.FC = () => {
                                 placeholder="Your answer here"
                                 disabled={flipped || isQuizFinished}
                             />
-                            <button onClick={handleAnswerSubmit} disabled={flipped || isQuizFinished}>Submit Answer</button>
+                            <button onClick={handleAnswerSubmit} disabled={flipped || isQuizFinished}>Submit Answer
+                            </button>
                         </div>
                         <div className="feedback-message-container">
                             {feedback && <div className="feedback-message">{feedback}</div>}
@@ -202,6 +208,7 @@ const QuizFlipCard: React.FC = () => {
                     <div className="feedback-message">Quiz finished! Your score: {score} / {cards.length}</div>
                 )}
             </div>
+            <button onClick={goBackToFlipCards}>Back to Flip Cards</button>
         </div>
     );
 };

@@ -59,7 +59,7 @@ const FlipCard: React.FC = () => {
     }, [id]);
 
     const handleAddFlipCard = async (question: string, concept: string, mnemonic: string) => {
-        const userId = 1; // Use a default user ID
+        const userId = 1;
         const newCard: Omit<FlipCardData, 'id'> = {
             question: question,
             concept: concept,
@@ -103,6 +103,10 @@ const FlipCard: React.FC = () => {
         navigate(`/quizcard/${userId}/${id}`);
     };
 
+    const goBack = () => {
+        navigate("/");
+    };
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -137,8 +141,9 @@ const FlipCard: React.FC = () => {
                     <div>No cards available</div>
                 )}
             </div>
-            <AddFlipCard onAddFlipCard={handleAddFlipCard} />
+            <AddFlipCard onAddFlipCard={handleAddFlipCard}/>
             <button onClick={goToQuiz}>Go to Quiz</button>
+            <button onClick={goBack}>Back to Card Sets</button>
         </div>
     );
 };
