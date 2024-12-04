@@ -11,7 +11,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<CardSetSelection />} />
                 <Route path="/card-set/:id" element={<FlipCard />} />
-                <Route path="/quizcard/:id" element={<QuizFlipcard />} />
+                <Route path="/quizcard/:userId/:setId" element={<QuizFlipcard />} />
             </Routes>
         </Router>
     );

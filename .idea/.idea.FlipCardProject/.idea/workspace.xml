@@ -13,11 +13,10 @@
       <change beforePath="$PROJECT_DIR$/.idea/.idea.FlipCardProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FlipCardProject/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/config/applicationhost.config" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/config/applicationhost.config" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FlipCardProject.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/FlipCardProject.sln.DotSettings.user" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FlipCardProject/Controllers/Home.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FlipCardProject/Controllers/Home.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FlipCardProject/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FlipCardProject/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FlipCardProject/Services/FlipcardRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FlipCardProject/Services/FlipcardRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TestProject1/UnitTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TestProject1/UnitTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/QuizFlipcard.css" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/QuizFlipcard.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/AddCardSet.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/AddCardSet.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/CardSetSelection.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/CardSetSelection.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/FlipCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/FlipCard.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flip-card-project-frontend/src/QuizFlipcard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/flip-card-project-frontend/src/QuizFlipcard.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -44,23 +43,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.FlipCardProject: IIS Express.executor&quot;: &quot;Run&quot;,
-    &quot;.NET Project.test.executor&quot;: &quot;Run&quot;,
-    &quot;3acec792-ed65-4ceb-a96b-be19a3f8faae.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;RiderIisExpressOptionsPageId&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.FlipCardProject: IIS Express.executor": "Run",
+    ".NET Project.test.executor": "Run",
+    "3acec792-ed65-4ceb-a96b-be19a3f8faae.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "29-saule--add-navigation-user-registration-and-delete-features",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "RiderIisExpressOptionsPageId",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.FlipCardProject: IIS Express">
     <configuration name="FlipCardProject: IIS Express" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/FlipCardProject/FlipCardProject.csproj" />
@@ -147,6 +146,7 @@
       <workItem from="1732032057227" duration="269000" />
       <workItem from="1732105664266" duration="5280000" />
       <workItem from="1732112156017" duration="8106000" />
+      <workItem from="1733305094474" duration="4090000" />
     </task>
     <servers />
   </component>

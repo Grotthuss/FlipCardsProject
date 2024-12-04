@@ -23,22 +23,19 @@ const CardSetSelection: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const location = useLocation();
+    const userId = 1;
 
     useEffect(() => {
         const fetchCardSets = async () => {
             setLoading(true);
             setError(null);
             try {
-                const response = await fetch('https://localhost:44372/api/Home/GetAllSets');
+                const response = await fetch(`https://localhost:44372/api/Home/${userId}/GetAllSets`);
                 if (!response.ok) {
                     throw new Error(Errors.NETWORK);
                 }
                 const data: CardSet[] = await response.json();
-                const updatedData = data.map((cardSet) => ({
-                    ...cardSet,
-                    userId: 1
-                }));
-                setCardSets(updatedData);
+                setCardSets(data);
             } catch (error) {
                 setError(Errors.SETS + (error as Error).message);
             } finally {
@@ -47,12 +44,12 @@ const CardSetSelection: React.FC = () => {
         };
 
         fetchCardSets();
-    }, [location]);
+    }, [location, userId]);
 
     const handleAddCardSet = (id: number, setName: string) => {
         const newCardSet: CardSet = {
             id: id,
-            userId: 1,
+            userId: userId,
             name: setName,
             flipcardsList: [],
         };
