@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './AddCardSet.css';
+import { useNavigate } from 'react-router-dom';
 
 interface AddCardSetProps {
     onAdd: (id: number, setName: string) => void;
@@ -8,10 +8,16 @@ interface AddCardSetProps {
 const AddCardSet: React.FC<AddCardSetProps> = ({ onAdd }) => {
     const [setName, setSetName] = useState('');
     const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
+
+        if (!setName.trim()) {
+            setError('Please provide a valid name for the card set.');
+            return;
+        }
 
         const requestData = {
             userId: 1,
@@ -60,6 +66,10 @@ const AddCardSet: React.FC<AddCardSetProps> = ({ onAdd }) => {
         }
     };
 
+    const handleDeleteSetsNavigation = () => {
+        navigate('/delete-sets');
+    };
+
     return (
         <form className="add-card-set-container" onSubmit={handleSubmit}>
             <h2>Add New Card Set</h2>
@@ -72,6 +82,9 @@ const AddCardSet: React.FC<AddCardSetProps> = ({ onAdd }) => {
             />
             {error && <p className="error-message">{error}</p>}
             <button type="submit">Add Card Set</button>
+            <button onClick={handleDeleteSetsNavigation} className="delete-sets-button">
+                Delete Sets
+            </button>
         </form>
     );
 };
