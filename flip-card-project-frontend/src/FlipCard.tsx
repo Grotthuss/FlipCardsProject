@@ -107,6 +107,10 @@ const FlipCard: React.FC = () => {
         navigate("/");
     };
 
+    const goToDeleteCards = () => {
+        navigate(`/delete-cards/${id}`);
+    };
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -144,6 +148,7 @@ const FlipCard: React.FC = () => {
             <AddFlipCard onAddFlipCard={handleAddFlipCard}/>
             <button onClick={goToQuiz}>Go to Quiz</button>
             <button onClick={goBack}>Back to Card Sets</button>
+            <button onClick={goToDeleteCards} className="delete-cards-button">Delete Cards</button>
         </div>
     );
 };

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation} from 'react-router-dom';
-import './CardSetSelection.css';
-import AddCardSet from './AddCardSet';
-import { Errors } from "./errorEnums";
+import {Link, useLocation, useNavigate} from 'react-router-dom';
+import './DeleteSet.css';
+import { Errors } from './errorEnums';
 
 interface CardAttribute {
     id: number;
@@ -18,11 +17,12 @@ interface CardSet {
     flipcardsList: CardAttribute[];
 }
 
-const CardSetSelection: React.FC = () => {
+const DeleteSets: React.FC = () => {
     const [cardSets, setCardSets] = useState<CardSet[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const location = useLocation();
+    const navigate = useNavigate();
     const userId = 1;
 
     useEffect(() => {
@@ -46,14 +46,22 @@ const CardSetSelection: React.FC = () => {
         fetchCardSets();
     }, [location, userId]);
 
-    const handleAddCardSet = (id: number, setName: string) => {
-        const newCardSet: CardSet = {
-            id: id,
-            userId: userId,
-            name: setName,
-            flipcardsList: [],
-        };
-        setCardSets([...cardSets, newCardSet]);
+    const deleteCardSet = async (setId: number) => {
+        try {
+            const response = await fetch(`https://localhost:44372/api/Home/${userId}/${setId}/DeleteSet`, {
+                method: 'DELETE',
+            });
+            if (!response.ok) {
+                throw new Error('Failed to delete set');
+            }
+            setCardSets(cardSets.filter((set) => set.id !== setId));
+        } catch (error) {
+            setError('Error deleting set: ' + (error as Error).message);
+        }
+    };
+
+    const goBack = () => {
+        navigate("/");
     };
 
     if (loading) {
@@ -65,29 +73,31 @@ const CardSetSelection: React.FC = () => {
     }
 
     return (
-        <div className="card-set-selection-container">
-            <div className="card-set-list">
+        <div className="card-set-deletion-container">
+            <div className="card-set-deletion-list">
                 {Array.isArray(cardSets) && cardSets.length > 0 ? (
                     cardSets.map((cardSet) => (
-                        <div key={cardSet.id} className="card-set">
+                        <div key={cardSet.id} className="card-set-deletion">
                             <Link to={`/card-set/${cardSet.id}`}>
                                 <div className="card">
                                     <h2>{cardSet.name}</h2>
                                 </div>
                             </Link>
+                            <button
+                                onClick={() => deleteCardSet(cardSet.id)}
+                                className="delete-set-button"
+                            >
+                                Delete
+                            </button>
                         </div>
                     ))
                 ) : (
                     <div>No card sets available</div>
                 )}
             </div>
-
-
-                <div className="add-card-set-form">
-                    <AddCardSet onAdd={handleAddCardSet}/>
-                </div>
+            <button onClick={goBack} className="go-back-button">Back to Card Sets</button>
         </div>
     );
 };
 
-export default CardSetSelection;
+export default DeleteSets;
