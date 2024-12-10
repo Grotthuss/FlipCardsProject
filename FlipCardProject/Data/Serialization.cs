@@ -38,7 +38,7 @@ public class Serialization
             foreach (var attribute in Set.cardAttributes)
             {
                 FlipcardState state = new FlipcardState();
-                cardSet.AddFlipcard(state, attribute.question, attribute.concept, attribute.mnemonic);
+                cardSet.AddFlipcard( attribute.question, attribute.concept, attribute.mnemonic);
             }
             
             cardSets.Add(cardSet);
