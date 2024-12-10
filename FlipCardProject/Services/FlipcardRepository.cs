@@ -89,9 +89,7 @@ public class FlipcardRepository
 
     public async Task<FlipcardSet> AddFlipcardSetAsync(FlipcardSet flipcardSet)
     {
-        var transaction = _context.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory" 
-            ? await _context.Database.BeginTransactionAsync()
-            : null;
+        
         
         try
         {
@@ -113,20 +111,15 @@ public class FlipcardRepository
             _context.Entry(flipcardSet).State = EntityState.Added;
            
             await _context.SaveChangesAsync();
-            if (transaction != null)
-            {
-                await transaction.CommitAsync();
-            }
+            
+           
             return flipcardSet;
         }
         catch (Exception e)
         {
            
-            if (transaction != null)
-            {
-                await transaction.RollbackAsync();
-            }
-            throw;
+           
+            throw e;
         }
         
         
@@ -134,10 +127,6 @@ public class FlipcardRepository
 
     public async Task AddFlipcardAsync(int userId,int setId, Flipcard flipcard)
     {
-        var transaction = _context.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory" 
-            ? await _context.Database.BeginTransactionAsync()
-            : null;
-
         try
         {
             var t = await _context.Users.FindAsync(userId);
@@ -160,27 +149,22 @@ public class FlipcardRepository
             {
                 throw new NullReferenceException();
             }
-            set.AddFlipcard(null/*flipcard.State*/,flipcard.Question,flipcard.Concept,flipcard.Mnemonic);
+            set.AddFlipcard(flipcard.Question,flipcard.Concept,flipcard.Mnemonic);
             var t_card = set.FlipcardsList.Last();
             _context.Entry(t_card).State = EntityState.Added;
             await _context.SaveChangesAsync();
-            if (transaction != null) await transaction.CommitAsync();
+           
         }
         catch (Exception e)
         {
-            if (transaction != null)
-            {
-                transaction.Rollback();
-            }
-            throw;
+            
+            throw e;
         }
     }
 
     public async Task<FlipcardSet> UpdateFlipcardSetAsync(FlipcardSet flipcardSet)
     {
-        var transaction = _context.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory" 
-            ? await _context.Database.BeginTransactionAsync()
-            : null;
+       
         
         try
         {
@@ -193,16 +177,20 @@ public class FlipcardRepository
                
             }
 
-            var existingSet = t.FlipcardSets.FirstOrDefault(x => x.Id == flipcardSet.Id);//await _context.FlipCardSets.FindAsync(flipcardSet.Id);
+            var existingSet = t.FlipcardSets.FirstOrDefault(x => x.Id == flipcardSet.Id);
             if (existingSet == null)
             {
                 existingSet  = new FlipcardSet(flipcardSet.Name);
-
+                existingSet.UserId = flipcardSet.UserId;
                 foreach (var card in flipcardSet.FlipcardsList)
                 {
-                    existingSet.AddFlipcard(null/*card.State*/,card.Question,card.Concept,card.Mnemonic);
+                    
+                    existingSet.AddFlipcard(card.Question,card.Concept,card.Mnemonic);
+                    var t1 = existingSet.FlipcardsList.Last();
+                    _context.Entry(t1).State = EntityState.Added;
                 }
-               
+                
+                
                 t.FlipcardSets.Add(existingSet);
                 _context.Entry(existingSet).State = EntityState.Added;
             }
@@ -224,11 +212,11 @@ public class FlipcardRepository
                         existingCard.Question = updatedCard.Question;
                         existingCard.Concept = updatedCard.Concept;
                         existingCard.Mnemonic = updatedCard.Mnemonic;
-                        //existingCard.State = updatedCard.State;
+                        
                     }
                     else
                     {
-                        existingSet.AddFlipcard(null/*updatedCard.State*/,updatedCard.Question,updatedCard.Concept,updatedCard.Mnemonic);
+                        existingSet.AddFlipcard(updatedCard.Question,updatedCard.Concept,updatedCard.Mnemonic);
                         var card = existingSet.FlipcardsList.Last();
                         _context.Entry(card).State = EntityState.Added;
                     }
@@ -237,21 +225,19 @@ public class FlipcardRepository
             }
 
             await _context.SaveChangesAsync();
-            if (transaction != null) await transaction.CommitAsync();
+           
             return existingSet;
         }
         catch (Exception e)
         {
-            if (transaction != null) transaction.Rollback();
-            throw;
+          
+            throw e;
         }
     }
 
     public async Task UpdateFlipcardAsync(int userId,int setId, Flipcard flipcard)
     {
-        var transaction = _context.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory" 
-            ? await _context.Database.BeginTransactionAsync()
-            : null;
+        
 
         try
         {
@@ -273,7 +259,7 @@ public class FlipcardRepository
             var existingCard = set.FlipcardsList.FirstOrDefault(x => x.Id == flipcard.Id);
             if (existingCard == null)
             {
-                set.AddFlipcard(null/*flipcard.State*/, flipcard.Question, flipcard.Concept, flipcard.Mnemonic);
+                set.AddFlipcard( flipcard.Question, flipcard.Concept, flipcard.Mnemonic);
                 var lastCard = set.FlipcardsList.Last();
                 _context.Entry(lastCard).State = EntityState.Added;
             }
@@ -282,23 +268,21 @@ public class FlipcardRepository
                 existingCard.Question = flipcard.Question;
                 existingCard.Concept = flipcard.Concept;
                 existingCard.Mnemonic = flipcard.Mnemonic;
-                //existingCard.State = flipcard.State;   
+               
             }
             await _context.SaveChangesAsync();
-            if (transaction != null) await transaction.CommitAsync();
+           
 
         }
         catch (Exception e)
         {
-            if (transaction != null) transaction.Rollback();
-            throw;
+           
+            throw e;
         }
     }
     public async Task DeleteFlipcardSetAsync(int userID,int setId)
     {
-        var transaction = _context.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory" 
-            ? await _context.Database.BeginTransactionAsync()
-            : null;
+      
 
         try
         {   
@@ -319,21 +303,19 @@ public class FlipcardRepository
 
             _context.Remove(set);
             await _context.SaveChangesAsync();
-            if (transaction != null) await transaction.CommitAsync();
+          
 
         }
         catch (Exception e)
         {
-            if (transaction != null) transaction.Rollback();
-            throw;
+          
+            throw e;
         }
     }
 
     public async Task DeleteFlipcardAsync(int userId,int setId, int cardId)
     {
-        var transaction = _context.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory" 
-            ? await _context.Database.BeginTransactionAsync()
-            : null;
+      
         
         try
         {
@@ -347,7 +329,7 @@ public class FlipcardRepository
                
             }
 
-            var set = t.FlipcardSets.FirstOrDefault(x => x.Id == setId);//await _context.FlipCardSets.FindAsync(setId);
+            var set = t.FlipcardSets.FirstOrDefault(x => x.Id == setId);
             if (set == null)
             {
                 throw new NullReferenceException();
@@ -360,12 +342,12 @@ public class FlipcardRepository
             }
             _context.Remove(card);
             await _context.SaveChangesAsync();
-            if (transaction != null) await transaction.CommitAsync();
+            
         }
         catch (Exception e)
         {
-            if (transaction != null) transaction.Rollback();
-            throw;
+          
+            throw e;
         }
     }
     
