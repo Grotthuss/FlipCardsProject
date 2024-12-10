@@ -24,9 +24,9 @@ public class UnitTests : IClassFixture<TestFixture>
         {
             FlipcardSet flipcardSet = new FlipcardSet("whatevz");
             
-            flipcardSet.AddFlipcard(new FlipcardState(),"1","1","1");
-            flipcardSet.AddFlipcard(new FlipcardState(),"2","2","2");
-            flipcardSet.AddFlipcard(new FlipcardState(),"3","3","3");
+            flipcardSet.AddFlipcard("1","1","1");
+            flipcardSet.AddFlipcard("2","2","2");
+            flipcardSet.AddFlipcard("3","3","3");
             
             var originalOrder = flipcardSet.FlipcardsList.ToList();
 
@@ -85,7 +85,7 @@ public class UnitTests : IClassFixture<TestFixture>
     public void Validate_ShouldReturnTrue_WhenFlipcardSetIsValid()
     {
         var flipcardSet = new FlipcardSet("name");
-        flipcardSet.AddFlipcard(new FlipcardState(), "1", "1", "1");
+        flipcardSet.AddFlipcard( "1", "1", "1");
 
         var isValid = _validator.Validate(flipcardSet, out var errors);
 
@@ -97,7 +97,7 @@ public class UnitTests : IClassFixture<TestFixture>
     public void Validate_ShouldReturnFalse_WhenNameIsNullOrEmpty()
     {
         var flipcardSet = new FlipcardSet(" ");
-        flipcardSet.AddFlipcard(new FlipcardState(), "1", "1", "1");
+        flipcardSet.AddFlipcard( "1", "1", "1");
 
         var isValid = _validator.Validate(flipcardSet, out var errors);
         
