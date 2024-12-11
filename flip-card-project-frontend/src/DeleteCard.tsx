@@ -16,7 +16,8 @@ const DeleteCards: React.FC = () => {
     const [cards, setCards] = useState<FlipCardData[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const userId = 1;
+    const { user_id } = useParams<{ user_id: string }>();
+    const userId = user_id ? parseInt(user_id, 10) : 0;
 
     useEffect(() => {
         const fetchCards = async () => {
@@ -70,7 +71,7 @@ const DeleteCards: React.FC = () => {
     };
 
     const goBack = () => {
-        navigate(`/card-set/${setId}`);
+        navigate(`/card-set/${userId}/${setId}`);
     };
 
     if (loading) {

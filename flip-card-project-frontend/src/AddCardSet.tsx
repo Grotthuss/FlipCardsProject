@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface AddCardSetProps {
+    userId: number;
     onAdd: (id: number, setName: string) => void;
 }
 
-const AddCardSet: React.FC<AddCardSetProps> = ({ onAdd }) => {
+const AddCardSet: React.FC<AddCardSetProps> = ({ userId, onAdd }) => {
     const [setName, setSetName] = useState('');
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
@@ -20,7 +21,7 @@ const AddCardSet: React.FC<AddCardSetProps> = ({ onAdd }) => {
         }
 
         const requestData = {
-            userId: 1,
+            userId: userId,
             name: setName.trim(),
             flipcardsList: [],
         };
@@ -67,7 +68,7 @@ const AddCardSet: React.FC<AddCardSetProps> = ({ onAdd }) => {
     };
 
     const handleDeleteSetsNavigation = () => {
-        navigate('/delete-sets');
+        navigate(`/delete-sets/${userId}`);
     };
 
     return (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation} from 'react-router-dom';
+import {Link, useLocation, useParams, To} from 'react-router-dom';
 import './CardSetSelection.css';
 import AddCardSet from './AddCardSet';
 import { Errors } from "./errorEnums";
@@ -23,9 +23,15 @@ const CardSetSelection: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const location = useLocation();
-    const userId = 1;
+    const { user_id } = useParams<{ user_id: string }>();
+    const userId = user_id ? parseInt(user_id, 10) : 0;
 
     useEffect(() => {
+
+        if (userId === 0) {
+            setError('Invalid user ID');
+            return;
+        }
         const fetchCardSets = async () => {
             setLoading(true);
             setError(null);
@@ -70,7 +76,7 @@ const CardSetSelection: React.FC = () => {
                 {Array.isArray(cardSets) && cardSets.length > 0 ? (
                     cardSets.map((cardSet) => (
                         <div key={cardSet.id} className="card-set">
-                            <Link to={`/card-set/${cardSet.id}`}>
+                            <Link to={`/card-set/${userId}/${cardSet.id}`}>
                                 <div className="card">
                                     <h2>{cardSet.name}</h2>
                                 </div>
@@ -81,10 +87,8 @@ const CardSetSelection: React.FC = () => {
                     <div>No card sets available</div>
                 )}
             </div>
-
-
                 <div className="add-card-set-form">
-                    <AddCardSet onAdd={handleAddCardSet}/>
+                    <AddCardSet userId={userId} onAdd={handleAddCardSet}/>
                 </div>
         </div>
     );

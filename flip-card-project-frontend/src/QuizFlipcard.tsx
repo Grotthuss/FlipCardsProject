@@ -19,6 +19,8 @@ interface CardSet {
 
 const QuizFlipCard: React.FC = () => {
     const { setId } = useParams<{ setId: string }>();
+    const { user_id } = useParams<{ user_id: string }>();
+    const userId = user_id ? parseInt(user_id, 10) : 0;
     const navigate = useNavigate();
     const [cards, setCards] = React.useState<FlipCardData[]>([]);
     const [loading, setLoading] = React.useState<boolean>(true);
@@ -28,7 +30,6 @@ const QuizFlipCard: React.FC = () => {
     const [score, setScore] = React.useState<number>(0);
     const [feedback, setFeedback] = React.useState<string | null>(null);
     const [flipped, setFlipped] = React.useState<boolean>(false);
-    const [userId] = React.useState<number>(1);
     const [activePlayers, setActivePlayers] = React.useState<number>(0);
 
     const fetchCards = async () => {
@@ -150,7 +151,7 @@ const QuizFlipCard: React.FC = () => {
     };
 
     const goBackToFlipCards = () => {
-        navigate(`/card-set/${setId}`);
+        navigate(`/card-set/${userId}/${setId}`);
     };
 
     if (loading) {

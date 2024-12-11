@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Link, useLocation, useNavigate} from 'react-router-dom';
+import {Link, useLocation, useNavigate, useParams} from 'react-router-dom';
 import './DeleteSet.css';
 import { Errors } from './errorEnums';
 
@@ -23,8 +23,8 @@ const DeleteSets: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const location = useLocation();
     const navigate = useNavigate();
-    const userId = 1;
-
+    const { user_id } = useParams<{ user_id: string }>();
+    const userId = user_id ? parseInt(user_id, 10) : 0;
     useEffect(() => {
         const fetchCardSets = async () => {
             setLoading(true);
@@ -61,7 +61,7 @@ const DeleteSets: React.FC = () => {
     };
 
     const goBack = () => {
-        navigate("/");
+        navigate(`/sets/${userId}`);
     };
 
     if (loading) {

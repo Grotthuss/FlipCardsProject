@@ -41,11 +41,11 @@ namespace FlipCardProject.Controllers
             
         }
 
-        [HttpPost("{name}/{email}/{password}/Register")]
+        [HttpPost("{email}/{password}/Register")]
 
-        public async Task<ActionResult<User>> Register(string name, string email, string password)
+        public async Task<ActionResult<User>> Register(string email, string password)
         {
-            var t = await _flipcardRepository.CreateAccount(name, email, password);
+            var t = await _flipcardRepository.CreateAccount(email, password);
             if (t == null)
             {
                 return BadRequest();
