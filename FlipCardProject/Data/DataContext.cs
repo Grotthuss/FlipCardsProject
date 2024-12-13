@@ -13,6 +13,7 @@ public class DataContext : DbContext
     public DbSet<FlipcardSet> FlipCardSets { get; set; }
     public DbSet<User> Users { get; set; }
     
+    public DbSet<Flipcard> Flipcards { get; set; }
     
     
     public DataContext(DbContextOptions<DataContext> options) : base(options)
@@ -27,7 +28,7 @@ public class DataContext : DbContext
         {
             entity.Property(u => u.Id).ValueGeneratedOnAdd().IsRequired();
             entity.HasKey(u => u.Id);
-            entity.Property(u => u.Name).IsRequired().HasMaxLength(100);
+            entity.Property(u => u.Salt).IsRequired().HasMaxLength(100);
             entity.Property(u => u.Email).IsRequired().HasMaxLength(100);
             entity.Property(u => u.Password).IsRequired().HasMaxLength(100);
             entity.OwnsMany(u => u.FlipcardSets, s =>
