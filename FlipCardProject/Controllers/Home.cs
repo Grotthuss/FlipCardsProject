@@ -28,37 +28,32 @@ namespace FlipCardProject.Controllers
         }
 
 
-        [HttpGet("{email}/{password}/Login")]
-        public async Task<ActionResult<int>> Login(string email, string password)
+        [HttpPost("Login")]
+        public async Task<ActionResult<int>> Login([FromBody] LoginModel loginModel)
         {
-            //_userTrackingService.Login(email, password);
-            var t = await _flipcardRepository.LoginUser(email, password);
-            if (t == 0)
+            var result = await _flipcardRepository.LoginUser(loginModel.Email, loginModel.Password);
+            if (result == 0)
             {
                 return NotFound();
             }
-            return Ok(t);
-            
+            return Ok(result);
         }
 
-        [HttpPost("{name}/{email}/{password}/Register")]
-
-        public async Task<ActionResult<User>> Register(string name, string email, string password)
+        [HttpPost("Register")]
+        public async Task<ActionResult<User>> Register([FromBody] RegisterModel registerModel)
         {
-            var t = await _flipcardRepository.CreateAccount(name, email, password);
-            if (t == null)
+            var result = await _flipcardRepository.CreateAccount(registerModel.Name, registerModel.Email, registerModel.Password);
+            if (result == null)
             {
                 return BadRequest();
             }
-            
-            return Ok(t);
-            
+            return Ok(result);
         }
 
-        [HttpDelete("{userId}/DeleteUser")]
-        public async Task DeleteUser(int userId)
+        [HttpPost("DeleteUser")]
+        public async Task DeleteUser([FromBody] DeleteUserModel deleteUserModel)
         {
-             await _flipcardRepository.DeleteUser(userId);
+            await _flipcardRepository.DeleteUser(deleteUserModel.UserId);
         }
         
         
