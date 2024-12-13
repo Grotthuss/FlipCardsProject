@@ -15,28 +15,13 @@ function App() {
             <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
-                <Route path="/sets/:user_id" element={<CardSetSelection />} />
-                <Route path="/card-set/:user_id/:id" element={<FlipCard />} />
-                <Route path="/quizcard/:user_id/:setId" element={<QuizFlipcard />} />
-                <Route path="/delete-sets/:user_id" element={<DeleteSets />} />
-                <Route path="/delete-cards/:user_id/:id" element={<DeleteCards />} />
+                <Route path="/sets" element={<CardSetSelection />} />
+                <Route path="/sets/set" element={<FlipCard />} />
+                <Route path="/sets/set/quiz" element={<QuizFlipcard />} />
+                <Route path="/sets/set/delete-sets" element={<DeleteSets />} />
+                <Route path="/sets/set/delete-cards" element={<DeleteCards />} />
             </Routes>
         </Router>
     );
 }
-/*
-function App() {
-    return (
-        <Router>
-            <Routes>
-                <Route path="/" element={<CardSetSelection />} />
-                <Route path="/card-set/:id" element={<FlipCard />} />
-                <Route path="/quizcard/:userId/:setId" element={<QuizFlipcard />} />
-                <Route path="/delete-sets" element={<DeleteSets />} />
-                <Route path="/delete-cards/:id" element={<DeleteCards />} />
-            </Routes>
-        </Router>
-    );
-}
-*/
 export default App;

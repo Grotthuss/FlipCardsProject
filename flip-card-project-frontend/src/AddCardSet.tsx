@@ -68,7 +68,7 @@ const AddCardSet: React.FC<AddCardSetProps> = ({ userId, onAdd }) => {
     };
 
     const handleDeleteSetsNavigation = () => {
-        navigate(`/delete-sets/${userId}`);
+        navigate(`/sets/set/delete-sets`, { state: { userId: userId } });
     };
 
     return (

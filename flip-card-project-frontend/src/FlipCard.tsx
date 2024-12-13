@@ -1,7 +1,7 @@
 import React from 'react';
 import './FlipCard.css';
 import AddFlipCard from "./AddFlipcard";
-import { useParams, useNavigate } from 'react-router-dom';
+import {useParams, useNavigate, useLocation} from 'react-router-dom';
 import { Errors } from "./errorEnums";
 
 interface FlipCardData {
@@ -19,9 +19,8 @@ interface CardSet {
 }
 
 const FlipCard: React.FC = () => {
-    const { id } = useParams<{ id: string }>();
-    const { user_id } = useParams<{ user_id: string }>();
-    const userId = user_id ? parseInt(user_id, 10) : 0;
+    const location = useLocation();
+    const { userId, id } = location.state || {};
     const navigate = useNavigate();
     const [cards, setCards] = React.useState<FlipCardData[]>([]);
     const [loading, setLoading] = React.useState<boolean>(true);
@@ -99,15 +98,15 @@ const FlipCard: React.FC = () => {
             setError("No cards available for the quiz.");
             return;
         }
-        navigate(`/quizcard/${userId}/${id}`);
+        navigate(`/sets/set/quiz`, { state: { userId: userId, setId: id } });
     };
 
     const goBack = () => {
-        navigate(`/sets/${userId}`);
+        navigate(`/sets`, { state: { userId: userId } } );
     };
 
     const goToDeleteCards = () => {
-        navigate(`/delete-cards/${userId}/${id}`);
+        navigate(`/sets/set/delete-cards`, { state: { userId: userId, setId: id } });
     };
 
     if (loading) {

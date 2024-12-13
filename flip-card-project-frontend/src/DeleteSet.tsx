@@ -19,12 +19,11 @@ interface CardSet {
 
 const DeleteSets: React.FC = () => {
     const [cardSets, setCardSets] = useState<CardSet[]>([]);
+    const location = useLocation();
+    const { userId } = location.state || {};
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const location = useLocation();
     const navigate = useNavigate();
-    const { user_id } = useParams<{ user_id: string }>();
-    const userId = user_id ? parseInt(user_id, 10) : 0;
     useEffect(() => {
         const fetchCardSets = async () => {
             setLoading(true);
@@ -61,7 +60,7 @@ const DeleteSets: React.FC = () => {
     };
 
     const goBack = () => {
-        navigate(`/sets/${userId}`);
+        navigate(`/sets`, { state: { userId: userId } });
     };
 
     if (loading) {

@@ -1,6 +1,6 @@
 import React from 'react';
 import './QuizFlipcard.css';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Errors } from "./errorEnums";
 
 interface FlipCardData {
@@ -18,9 +18,8 @@ interface CardSet {
 }
 
 const QuizFlipCard: React.FC = () => {
-    const { setId } = useParams<{ setId: string }>();
-    const { user_id } = useParams<{ user_id: string }>();
-    const userId = user_id ? parseInt(user_id, 10) : 0;
+    const location = useLocation();
+    const { userId, setId } = location.state || {};
     const navigate = useNavigate();
     const [cards, setCards] = React.useState<FlipCardData[]>([]);
     const [loading, setLoading] = React.useState<boolean>(true);
@@ -151,7 +150,7 @@ const QuizFlipCard: React.FC = () => {
     };
 
     const goBackToFlipCards = () => {
-        navigate(`/card-set/${userId}/${setId}`);
+        navigate(`/sets/set`, { state: { userId: userId, id: setId } });
     };
 
     if (loading) {

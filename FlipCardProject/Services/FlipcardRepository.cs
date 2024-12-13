@@ -36,7 +36,7 @@ public class FlipcardRepository
             Id = 0,
             Email = email,
             Password = hashedPassword,
-            Salt = saltString, //PERVADINTI I SALT LENETELEJE
+            Salt = saltString,
             FlipcardSets = new List<FlipcardSet>()
         };
         await _context.Users.AddAsync(user);
@@ -52,7 +52,7 @@ public class FlipcardRepository
             return 0;
         }
 
-        if (!(user.Password == Hashers.HashPassword(password, Convert.FromBase64String(user.Salt)))) //IRGI NAME PERVADINTI I SALT
+        if (!(user.Password == Hashers.HashPassword(password, Convert.FromBase64String(user.Salt))))
         {
             return 0;
         }

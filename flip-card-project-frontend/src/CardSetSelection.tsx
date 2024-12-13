@@ -23,8 +23,7 @@ const CardSetSelection: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const location = useLocation();
-    const { user_id } = useParams<{ user_id: string }>();
-    const userId = user_id ? parseInt(user_id, 10) : 0;
+    const { userId } = location.state || {};
 
     useEffect(() => {
 
@@ -76,7 +75,7 @@ const CardSetSelection: React.FC = () => {
                 {Array.isArray(cardSets) && cardSets.length > 0 ? (
                     cardSets.map((cardSet) => (
                         <div key={cardSet.id} className="card-set">
-                            <Link to={`/card-set/${userId}/${cardSet.id}`}>
+                            <Link to="/sets/set" state={{ userId: userId, id: cardSet.id }}>
                                 <div className="card">
                                     <h2>{cardSet.name}</h2>
                                 </div>

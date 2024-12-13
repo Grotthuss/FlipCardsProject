@@ -13,16 +13,21 @@ const Login: React.FC = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch(`https://localhost:44372/api/Home/${email}/${password}/Login`, {
-                method: 'GET',
+            const response = await fetch(`https://localhost:44372/api/Home/Login`, {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
+
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
             });
 
             if (response.ok) {
                 const userId = await response.json();
-                navigate(`/sets/${userId}`);
+                navigate('/sets', { state: { userId: userId } });
             } else {
                 setError("Problem while logging in")
             }
