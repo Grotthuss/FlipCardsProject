@@ -1,12 +1,13 @@
-using System.Security.Cryptography.X509Certificates;
+
 using FlipCardProject.Data;
 using FlipCardProject.Exceptions;
 using FlipCardProject.logs;
 
-namespace FlipCardProject.Services;using Microsoft.EntityFrameworkCore;
+namespace FlipCardProject.Services;
+using Microsoft.EntityFrameworkCore;
 
 using FlipCardProject.Models;
-
+using FlipCardProject.Helpers;
 
 public class FlipcardRepository
 {
@@ -18,19 +19,24 @@ public class FlipcardRepository
     }
 
 
-    public async Task<User> CreateAccount(string name, string email, string password)
+    public async Task<User> CreateAccount(string email, string password)
     {
         if (await _context.Users.AnyAsync(u => u.Email == email))
         {
             return null;
         }
 
+        byte[] salt  = Hashers.GenerateSalt();
+        string hashedPassword = Hashers.HashPassword(password, salt );
+
+        string saltString = Convert.ToBase64String(salt);
+
         User user = new User
         {   
             Id = 0,
             Email = email,
-            Password = password,
-            Name = name,
+            Password = hashedPassword,
+            Salt = saltString,
             FlipcardSets = new List<FlipcardSet>()
         };
         await _context.Users.AddAsync(user);
@@ -46,7 +52,7 @@ public class FlipcardRepository
             return 0;
         }
 
-        if (!(user.Password == password))
+        if (!(user.Password == Hashers.HashPassword(password, Convert.FromBase64String(user.Salt))))
         {
             return 0;
         }

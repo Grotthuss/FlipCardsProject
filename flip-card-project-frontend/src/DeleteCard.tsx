@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import {useParams, useNavigate, useLocation} from 'react-router-dom';
 import './DeleteCard.css';
 import { Errors } from './errorEnums';
 
@@ -11,12 +11,12 @@ interface FlipCardData {
 }
 
 const DeleteCards: React.FC = () => {
-    const { id: setId } = useParams<{ id: string }>();
+    const location = useLocation();
+    const { userId, setId } = location.state || {};
     const navigate = useNavigate();
     const [cards, setCards] = useState<FlipCardData[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const userId = 1;
 
     useEffect(() => {
         const fetchCards = async () => {
@@ -70,7 +70,7 @@ const DeleteCards: React.FC = () => {
     };
 
     const goBack = () => {
-        navigate(`/card-set/${setId}`);
+        navigate(`/sets/set`, { state: { userId: userId, id: setId } });
     };
 
     if (loading) {

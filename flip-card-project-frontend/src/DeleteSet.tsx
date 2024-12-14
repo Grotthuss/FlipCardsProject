@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Link, useLocation, useNavigate} from 'react-router-dom';
+import {Link, useLocation, useNavigate, useParams} from 'react-router-dom';
 import './DeleteSet.css';
 import { Errors } from './errorEnums';
 
@@ -19,12 +19,11 @@ interface CardSet {
 
 const DeleteSets: React.FC = () => {
     const [cardSets, setCardSets] = useState<CardSet[]>([]);
+    const location = useLocation();
+    const { userId } = location.state || {};
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const location = useLocation();
     const navigate = useNavigate();
-    const userId = 1;
-
     useEffect(() => {
         const fetchCardSets = async () => {
             setLoading(true);
@@ -61,7 +60,7 @@ const DeleteSets: React.FC = () => {
     };
 
     const goBack = () => {
-        navigate("/");
+        navigate(`/sets`, { state: { userId: userId } });
     };
 
     if (loading) {

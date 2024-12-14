@@ -1,7 +1,7 @@
 import React from 'react';
 import './FlipCard.css';
 import AddFlipCard from "./AddFlipcard";
-import { useParams, useNavigate } from 'react-router-dom';
+import {useParams, useNavigate, useLocation} from 'react-router-dom';
 import { Errors } from "./errorEnums";
 
 interface FlipCardData {
@@ -19,7 +19,8 @@ interface CardSet {
 }
 
 const FlipCard: React.FC = () => {
-    const { id } = useParams<{ id: string }>();
+    const location = useLocation();
+    const { userId, id } = location.state || {};
     const navigate = useNavigate();
     const [cards, setCards] = React.useState<FlipCardData[]>([]);
     const [loading, setLoading] = React.useState<boolean>(true);
@@ -33,7 +34,6 @@ const FlipCard: React.FC = () => {
         }
 
         try {
-            const userId = 1;
             const response = await fetch(`https://localhost:44372/api/Home/${userId}/${id}/GetCardSet`);
 
             if (!response.ok) {
@@ -56,10 +56,9 @@ const FlipCard: React.FC = () => {
 
     React.useEffect(() => {
         fetchCards();
-    }, [id]);
+    }, [userId, id]);
 
     const handleAddFlipCard = async (question: string, concept: string, mnemonic: string) => {
-        const userId = 1;
         const newCard: Omit<FlipCardData, 'id'> = {
             question: question,
             concept: concept,
@@ -99,16 +98,15 @@ const FlipCard: React.FC = () => {
             setError("No cards available for the quiz.");
             return;
         }
-        const userId = 1;
-        navigate(`/quizcard/${userId}/${id}`);
+        navigate(`/sets/set/quiz`, { state: { userId: userId, setId: id } });
     };
 
     const goBack = () => {
-        navigate("/");
+        navigate(`/sets`, { state: { userId: userId } } );
     };
 
     const goToDeleteCards = () => {
-        navigate(`/delete-cards/${id}`);
+        navigate(`/sets/set/delete-cards`, { state: { userId: userId, setId: id } });
     };
 
     if (loading) {
