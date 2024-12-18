@@ -85,7 +85,6 @@ const QuizFlipCard: React.FC = () => {
     };
 
     const endGame = async () => {
-        try {
             const response = await fetch(`https://localhost:44372/api/Home/${userId}/EndGame`, {
                 method: 'POST',
             });
@@ -93,9 +92,6 @@ const QuizFlipCard: React.FC = () => {
             if (!response.ok) {
                 throw new Error('Failed to end game.');
             }
-        } catch (error) {
-            setError(`End Game Error: ${(error as Error).message}`);
-        }
     };
 
     React.useEffect(() => {
@@ -153,6 +149,19 @@ const QuizFlipCard: React.FC = () => {
         navigate(`/sets/set`, { state: { userId: userId, id: setId } });
     };
 
+    React.useEffect(() => {
+        const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+            endGame(); // Call the endGame function when the tab or window is being closed
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        
+        return () => {
+            //endGame();
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, [userId]);
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -165,9 +174,9 @@ const QuizFlipCard: React.FC = () => {
 
     return (
         <div className="flip-card-page">
-            {/*<div className="active-players-count">
-                Active Players: {activePlayers}
-            </div>*/}
+            {<div className="active-players-count">
+                Active Quiz Players: {activePlayers}
+            </div>}
 
             <h2>Quiz Score: {score} / {cards.length}</h2>
             <div className="cards-container">
