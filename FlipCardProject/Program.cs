@@ -12,32 +12,16 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-/*Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console()
-    .WriteTo.File("Logs/ef-core-queries.log", rollingInterval: RollingInterval.Day)
-    .CreateLogger();
 
-builder.Logging.ClearProviders();
-builder.Logging.AddSerilog();
-
-builder.Services.AddDbContext<DataContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-        .EnableSensitiveDataLogging() 
-        .LogTo(Log.Information, new[] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information)
-);*/
-
-
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddControllers(); 
 builder.Services.AddCors(options =>
 { 
     options.AddPolicy("AllowAll",
         builder =>
         {
-            builder.AllowAnyOrigin() // Allow any origin
-                .AllowAnyMethod() // Allow any HTTP method
-                .AllowAnyHeader(); // Allow any header
+            builder.AllowAnyOrigin() 
+                .AllowAnyMethod() 
+                .AllowAnyHeader(); 
         });
 });
 builder.Services.AddEndpointsApiExplorer();
@@ -57,7 +41,7 @@ builder.Services.AddScoped(typeof(GenericValidator<>));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

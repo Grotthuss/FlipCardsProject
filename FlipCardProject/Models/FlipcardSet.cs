@@ -6,7 +6,7 @@ namespace FlipCardProject.Models;
 
 using System;
 using System.Collections.Generic;
-using Records;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -48,13 +48,7 @@ public class FlipcardSet : IEquatable<FlipcardSet>
         _set_name = setName;
         _flipcards_list = new List<Flipcard>();
     }
-
-    public FlipcardSet(FlipcardSetDto t)
-    {
-        _flipcards_list = t.FlipcardsList ?? new List<Flipcard>();
-        _set_name = t.SetName;
-    }
-
+    
     public void AddFlipcard(string question = "No question", string concept = "No concept", string mnemonic = "No mnemonic")
     {
         Flipcard flipcard = new Flipcard(question: question, concept: concept, mnemonic: mnemonic);
@@ -85,8 +79,3 @@ public class FlipcardSet : IEquatable<FlipcardSet>
     }
 }
 
-public class FlipcardSetDto
-{
-    public string SetName { get; set; }
-    public List<Flipcard> FlipcardsList { get; set; } = new List<Flipcard>();
-}

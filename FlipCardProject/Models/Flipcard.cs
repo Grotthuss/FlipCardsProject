@@ -4,8 +4,8 @@ using Microsoft.EntityFrameworkCore;
 namespace FlipCardProject.Models;
 
 using System;
-using FlipCardProject.Enums;
-using FlipCardProject.Records;
+
+
 [Owned]
 public sealed record Flipcard : IEquatable<Flipcard>
 {
@@ -14,7 +14,7 @@ public sealed record Flipcard : IEquatable<Flipcard>
    
     private string _concept;
     private string _mnemonic;
-    //private FlipcardState _state;
+    
     private string _question;
     
     
@@ -44,11 +44,7 @@ public sealed record Flipcard : IEquatable<Flipcard>
         set { _mnemonic = value; }
     }
 
-    /*public FlipcardState State
-    {
-        get { return _state; }
-        set { _state = value; }
-    }*/
+  
     
 
     public Flipcard(string question,string concept, string mnemonic)
@@ -56,8 +52,7 @@ public sealed record Flipcard : IEquatable<Flipcard>
         _question = question;
         _concept = concept;
         _mnemonic = mnemonic;
-       // _state = state;
-      //  UserId = 0;
+       
     
     }
 
@@ -66,18 +61,15 @@ public sealed record Flipcard : IEquatable<Flipcard>
     {
         if (other is null) return false;
         return _mnemonic == other._mnemonic &&
-               //_state == other._state &&
+               
                _question == other._question &&
                _concept == other._concept;
     }
 
-    /*public override bool Equals(object? obj)
-    {
-        return obj is Flipcard card && Equals(card);
-    }*/
+   
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(_mnemonic, /*_state,*/ _question, _concept);
+        return HashCode.Combine(_mnemonic, _question, _concept);
     }
 }

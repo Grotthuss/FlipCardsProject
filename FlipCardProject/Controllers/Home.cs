@@ -1,6 +1,6 @@
 using System.Text.Json;
 using FlipCardProject.Models;
-using FlipCardProject.Records;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using FlipCardProject.Data;
@@ -105,23 +105,6 @@ namespace FlipCardProject.Controllers
             return Ok(set);
         }
         
-        
-        
-        
-        /*[HttpGet("{setId}/CardsOfAnotherState")]
-        public async Task<ActionResult<IEnumerable<FlipcardSet>>> GetCardsOfSomeState(int setId, [FromQuery]  FlipcardState state)
-        {
-            var set = await _flipcardRepository.GetFlipcardSetByIdAsync(setId);
-            if (set == null)
-            {
-                return NotFound();
-            }
-            
-            var cards = set.FlipcardsList.FindAll(x => x.State == state);
-            return Ok(cards);
-        }*/
-        
-
         [HttpGet("{userId}/{setId}/ShuffleCards")]
 
         public async Task<ActionResult<List<Flipcard>>> GetShuffleCards(int userId,int setId)
