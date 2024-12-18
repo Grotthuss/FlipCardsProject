@@ -33,3 +33,10 @@ Message: User not found.
 Stack Trace: 
 -------------------------------------
 
+=====================================
+Date/Time: 16/12/2024 17:37:17
+Exception Type: FlipCardProject.Exceptions.UserNotFound
+Message: User not found.
+Stack Trace: 
+-------------------------------------
+

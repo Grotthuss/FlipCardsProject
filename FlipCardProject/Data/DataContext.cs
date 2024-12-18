@@ -1,6 +1,6 @@
-using FlipCardProject.Enums;
+
 using FlipCardProject.Models;
-using FlipCardProject.Records;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -40,7 +40,7 @@ public class DataContext : DbContext
 
                 s.OwnsMany(f => f.FlipcardsList, a =>
                 {
-                    a.WithOwner().HasForeignKey("SetId"); // Foreign key in Flipcard
+                    a.WithOwner().HasForeignKey("SetId");
                     a.Property(f => f.Id).ValueGeneratedOnAdd().IsRequired();
                     a.HasKey(f => f.Id);
                     a.Property(f => f.Concept).HasMaxLength(300).IsRequired();

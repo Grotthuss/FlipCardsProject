@@ -42,6 +42,10 @@ public class FlipcardRepository
         await _context.Users.AddAsync(user);
         await _context.SaveChangesAsync();
         return user;
+        
+        
+        
+        
     }
 
     public async Task<int> LoginUser(string email, string password)
@@ -78,7 +82,10 @@ public class FlipcardRepository
     public async Task<List<FlipcardSet>> GetAllFlipcardSetsAsync(int userId)
     {   
         var t = await _context.Users.FindAsync(userId);
-        
+        if (t == null)
+        {
+            return null;
+        }
          return t.FlipcardSets.ToList();
     }
 
@@ -89,16 +96,21 @@ public class FlipcardRepository
         {
             return null;
         }
+        
+        var set = t.FlipcardSets.FirstOrDefault(fs => fs.Id == setId);
+        if (set == null)
+        {
+            return null;
+        }
      
-        return t.FlipcardSets.FirstOrDefault(x => x.Id == setId);
+        return set;
     }
 
     public async Task<FlipcardSet> AddFlipcardSetAsync(FlipcardSet flipcardSet)
     {
         
         
-        try
-        {
+        
             var t = await _context.Users.FindAsync(flipcardSet.UserId);
             if (t == null)
             {
@@ -120,21 +132,14 @@ public class FlipcardRepository
             
            
             return flipcardSet;
-        }
-        catch (Exception e)
-        {
-           
-           
-            throw e;
-        }
+       
         
         
     }
 
     public async Task AddFlipcardAsync(int userId,int setId, Flipcard flipcard)
     {
-        try
-        {
+        
             var t = await _context.Users.FindAsync(userId);
 
             if (t == null)
@@ -160,20 +165,15 @@ public class FlipcardRepository
             _context.Entry(t_card).State = EntityState.Added;
             await _context.SaveChangesAsync();
            
-        }
-        catch (Exception e)
-        {
-            
-            throw e;
-        }
+        
+       
     }
 
     public async Task<FlipcardSet> UpdateFlipcardSetAsync(FlipcardSet flipcardSet)
     {
        
         
-        try
-        {
+       
             var t = await _context.Users.FindAsync(flipcardSet.UserId);
             if (t == null)
             {
@@ -233,20 +233,14 @@ public class FlipcardRepository
             await _context.SaveChangesAsync();
            
             return existingSet;
-        }
-        catch (Exception e)
-        {
-          
-            throw e;
-        }
+       
     }
 
     public async Task UpdateFlipcardAsync(int userId,int setId, Flipcard flipcard)
     {
         
 
-        try
-        {
+        
             var t = await _context.Users.FindAsync(userId);
             if (t == null)
             {
@@ -279,19 +273,13 @@ public class FlipcardRepository
             await _context.SaveChangesAsync();
            
 
-        }
-        catch (Exception e)
-        {
-           
-            throw e;
-        }
+        
     }
     public async Task DeleteFlipcardSetAsync(int userID,int setId)
     {
       
 
-        try
-        {   
+           
             var t = await _context.Users.FindAsync(userID);
             if (t == null)
             {
@@ -311,20 +299,14 @@ public class FlipcardRepository
             await _context.SaveChangesAsync();
           
 
-        }
-        catch (Exception e)
-        {
-          
-            throw e;
-        }
+        
     }
 
     public async Task DeleteFlipcardAsync(int userId,int setId, int cardId)
     {
       
         
-        try
-        {
+        
             var t = await _context.Users.FindAsync(userId);
 
             if (t == null)
@@ -349,12 +331,8 @@ public class FlipcardRepository
             _context.Remove(card);
             await _context.SaveChangesAsync();
             
-        }
-        catch (Exception e)
-        {
-          
-            throw e;
-        }
+        
+        
     }
     
     
