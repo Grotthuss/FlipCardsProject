@@ -35,7 +35,7 @@ const FlipCard: React.FC = () => {
         }
 
         try {
-            const response = await fetch(`https://localhost:44372/api/Home/${userId}/${id}/GetCardSet`);
+            const response = await fetch(`https://flipcardsbc.azurewebsites.net/api/Home/${userId}/${id}/GetCardSet`);
 
             if (!response.ok) {
                 throw new Error(Errors.NETWORK);
@@ -67,7 +67,7 @@ const FlipCard: React.FC = () => {
         };
 
         try {
-            const response = await fetch(`https://localhost:44372/api/Home/${userId}/${id}/CreateCard`, {
+            const response = await fetch(`https://flipcardsbc.azurewebsites.net/api/Home/${userId}/${id}/CreateCard`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newCard),
@@ -112,7 +112,7 @@ const FlipCard: React.FC = () => {
 
     const fetchActivePlayers = async () => {
         try {
-            const response = await fetch('https://localhost:44372/api/Home/ActivePlayerCount');
+            const response = await fetch('https://flipcardsbc.azurewebsites.net/api/Home/ActivePlayerCount');
             if (!response.ok) {
                 throw new Error('Failed to fetch active players count.');
             }

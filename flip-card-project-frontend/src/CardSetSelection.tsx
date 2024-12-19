@@ -36,7 +36,7 @@ const CardSetSelection: React.FC = () => {
             setLoading(true);
             setError(null);
             try {
-                const response = await fetch(`https://localhost:44372/api/Home/${userId}/GetAllSets`);
+                const response = await fetch(`https://flipcardsbc.azurewebsites.net/api/Home/${userId}/GetAllSets`);
                 if (!response.ok) {
                     throw new Error(Errors.NETWORK);
                 }
@@ -64,7 +64,7 @@ const CardSetSelection: React.FC = () => {
 
     const fetchActivePlayers = async () => {
         try {
-            const response = await fetch('https://localhost:44372/api/Home/ActivePlayerCount');
+            const response = await fetch('https://flipcardsbc.azurewebsites.net/api/Home/ActivePlayerCount');
             if (!response.ok) {
                 throw new Error('Failed to fetch active players count.');
             }
