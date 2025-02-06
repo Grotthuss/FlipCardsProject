@@ -25,6 +25,7 @@ const FlipCard: React.FC = () => {
     const [cards, setCards] = React.useState<FlipCardData[]>([]);
     const [loading, setLoading] = React.useState<boolean>(true);
     const [error, setError] = React.useState<string | null>(null);
+    const [activePlayers, setActivePlayers] = React.useState<number>(0);
 
     const fetchCards = async () => {
         if (!id) {
@@ -109,6 +110,25 @@ const FlipCard: React.FC = () => {
         navigate(`/sets/set/delete-cards`, { state: { userId: userId, setId: id } });
     };
 
+    const fetchActivePlayers = async () => {
+        try {
+            const response = await fetch('https://localhost:44372/api/Home/ActivePlayerCount');
+            if (!response.ok) {
+                throw new Error('Failed to fetch active players count.');
+            }
+            const count = await response.json();
+            setActivePlayers(count);
+        } catch (error) {
+            console.error(`Error fetching active players: ${(error as Error).message}`);
+        }
+    };
+
+    React.useEffect(() => {
+        fetchActivePlayers();
+        const interval = setInterval(fetchActivePlayers, 500);
+        return () => clearInterval(interval);
+    }, []);
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -119,6 +139,9 @@ const FlipCard: React.FC = () => {
 
     return (
         <div className="flip-card-page">
+            {<div className="active-players-count">
+                Active Quiz Players: {activePlayers}
+            </div>}
             <div className="cards-container">
                 {cards.length > 0 ? (
                     cards.map((card, index) => (

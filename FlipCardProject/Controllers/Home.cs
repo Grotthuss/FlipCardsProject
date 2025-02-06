@@ -24,7 +24,6 @@ namespace FlipCardProject.Controllers
             _flipcardRepository = flipcardRepository;
             _userTrackingService = userTrackingService;
             _genericValidator = genericValidator;
-            //_genericValidator.AddRule(set => !string.IsNullOrWhiteSpace(set.Name));
         }
 
 
@@ -242,18 +241,6 @@ namespace FlipCardProject.Controllers
             
         }
         
-        [HttpPost("LogError")]
-        public IActionResult LogError([FromBody] ErrorLog log)
-        {
-            string logFilePath = Path.Combine(Directory.GetCurrentDirectory(), "logs", "errorLog.txt");
-        
-            Directory.CreateDirectory(Path.GetDirectoryName(logFilePath));
-        
-            System.IO.File.AppendAllText(logFilePath, $"{DateTime.Now}: {log.Message}\n");
-        
-            return Ok();
-        }
-        
         [HttpPost("ValidateSet")]
         public IActionResult ValidateSet([FromBody] FlipcardSet flipcardSet)
         {
@@ -273,11 +260,6 @@ namespace FlipCardProject.Controllers
 
             Console.WriteLine("Validation succeeded for Flipcard Set.");
             return Ok("Flipcard Set is valid.");
-        }
-        
-        public class ErrorLog
-        {
-            public string Message { get; set; }
         }
         
     }

@@ -24,6 +24,8 @@ const DeleteSets: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
+    const [activePlayers, setActivePlayers] = React.useState<number>(0);
+    
     useEffect(() => {
         const fetchCardSets = async () => {
             setLoading(true);
@@ -63,6 +65,25 @@ const DeleteSets: React.FC = () => {
         navigate(`/sets`, { state: { userId: userId } });
     };
 
+    const fetchActivePlayers = async () => {
+        try {
+            const response = await fetch('https://localhost:44372/api/Home/ActivePlayerCount');
+            if (!response.ok) {
+                throw new Error('Failed to fetch active players count.');
+            }
+            const count = await response.json();
+            setActivePlayers(count);
+        } catch (error) {
+            console.error(`Error fetching active players: ${(error as Error).message}`);
+        }
+    };
+
+    React.useEffect(() => {
+        fetchActivePlayers();
+        const interval = setInterval(fetchActivePlayers, 500);
+        return () => clearInterval(interval);
+    }, []);
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -72,31 +93,36 @@ const DeleteSets: React.FC = () => {
     }
 
     return (
-        <div className="card-set-deletion-container">
-            <div className="card-set-deletion-list">
-                {Array.isArray(cardSets) && cardSets.length > 0 ? (
-                    cardSets.map((cardSet) => (
-                        <div key={cardSet.id} className="card-set-deletion">
-                            <Link to={`/card-set/${cardSet.id}`}>
-                                <div className="card">
-                                    <h2>{cardSet.name}</h2>
-                                </div>
-                            </Link>
-                            <button
-                                onClick={() => deleteCardSet(cardSet.id)}
-                                className="delete-set-button"
-                            >
-                                Delete
-                            </button>
-                        </div>
-                    ))
-                ) : (
-                    <div>No card sets available</div>
-                )}
+        <div className="cardset-deletion-page">
+            {<div className="active-players-count">
+                Active Quiz Players: {activePlayers}
+            </div>}
+            <div className="card-set-deletion-container">
+                <div className="card-set-deletion-list">
+                    {Array.isArray(cardSets) && cardSets.length > 0 ? (
+                        cardSets.map((cardSet) => (
+                            <div key={cardSet.id} className="card-set-deletion">
+                                <Link to={`/card-set/${cardSet.id}`}>
+                                    <div className="card">
+                                        <h2>{cardSet.name}</h2>
+                                    </div>
+                                </Link>
+                                <button
+                                    onClick={() => deleteCardSet(cardSet.id)}
+                                    className="delete-set-button"
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        ))
+                    ) : (
+                        <div>No card sets available</div>
+                    )}
+                </div>
+                <button onClick={goBack} className="go-back-button">Back to Card Sets</button>
             </div>
-            <button onClick={goBack} className="go-back-button">Back to Card Sets</button>
         </div>
-    );
-};
+            );
+            };
 
-export default DeleteSets;
+            export default DeleteSets;

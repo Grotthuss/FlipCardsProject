@@ -17,6 +17,7 @@ const DeleteCards: React.FC = () => {
     const [cards, setCards] = useState<FlipCardData[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [activePlayers, setActivePlayers] = React.useState<number>(0);
 
     useEffect(() => {
         const fetchCards = async () => {
@@ -73,6 +74,25 @@ const DeleteCards: React.FC = () => {
         navigate(`/sets/set`, { state: { userId: userId, id: setId } });
     };
 
+    const fetchActivePlayers = async () => {
+        try {
+            const response = await fetch('https://localhost:44372/api/Home/ActivePlayerCount');
+            if (!response.ok) {
+                throw new Error('Failed to fetch active players count.');
+            }
+            const count = await response.json();
+            setActivePlayers(count);
+        } catch (error) {
+            console.error(`Error fetching active players: ${(error as Error).message}`);
+        }
+    };
+
+    React.useEffect(() => {
+        fetchActivePlayers();
+        const interval = setInterval(fetchActivePlayers, 500);
+        return () => clearInterval(interval);
+    }, []);
+    
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -83,6 +103,9 @@ const DeleteCards: React.FC = () => {
 
     return (
         <div className="card-deletion-container">
+            {<div className="active-players-count">
+                Active Quiz Players: {activePlayers}
+            </div>}
             <div className="card-deletion-list">
                 {Array.isArray(cards) && cards.length > 0 ? (
                     cards.map((card) => (

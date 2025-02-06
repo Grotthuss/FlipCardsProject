@@ -24,6 +24,7 @@ const CardSetSelection: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const location = useLocation();
     const { userId } = location.state || {};
+    const [activePlayers, setActivePlayers] = React.useState<number>(0);
 
     useEffect(() => {
 
@@ -61,6 +62,25 @@ const CardSetSelection: React.FC = () => {
         setCardSets([...cardSets, newCardSet]);
     };
 
+    const fetchActivePlayers = async () => {
+        try {
+            const response = await fetch('https://localhost:44372/api/Home/ActivePlayerCount');
+            if (!response.ok) {
+                throw new Error('Failed to fetch active players count.');
+            }
+            const count = await response.json();
+            setActivePlayers(count);
+        } catch (error) {
+            console.error(`Error fetching active players: ${(error as Error).message}`);
+        }
+    };
+
+    React.useEffect(() => {
+        fetchActivePlayers();
+        const interval = setInterval(fetchActivePlayers, 500);
+        return () => clearInterval(interval);
+    }, []);
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -70,27 +90,32 @@ const CardSetSelection: React.FC = () => {
     }
 
     return (
-        <div className="card-set-selection-container">
-            <div className="card-set-list">
-                {Array.isArray(cardSets) && cardSets.length > 0 ? (
-                    cardSets.map((cardSet) => (
-                        <div key={cardSet.id} className="card-set">
-                            <Link to="/sets/set" state={{ userId: userId, id: cardSet.id }}>
-                                <div className="card">
-                                    <h2>{cardSet.name}</h2>
-                                </div>
-                            </Link>
-                        </div>
-                    ))
-                ) : (
-                    <div>No card sets available</div>
-                )}
-            </div>
+        <div className="cardset-selection-page">
+            {<div className="active-players-count">
+                Active Quiz Players: {activePlayers}
+            </div>}
+            <div className="card-set-selection-container">
+                <div className="card-set-list">
+                    {Array.isArray(cardSets) && cardSets.length > 0 ? (
+                        cardSets.map((cardSet) => (
+                            <div key={cardSet.id} className="card-set">
+                                <Link to="/sets/set" state={{userId: userId, id: cardSet.id}}>
+                                    <div className="card">
+                                        <h2>{cardSet.name}</h2>
+                                    </div>
+                                </Link>
+                            </div>
+                        ))
+                    ) : (
+                        <div>No card sets available</div>
+                    )}
+                </div>
                 <div className="add-card-set-form">
                     <AddCardSet userId={userId} onAdd={handleAddCardSet}/>
                 </div>
+            </div>
         </div>
-    );
-};
+            );
+            };
 
-export default CardSetSelection;
+            export default CardSetSelection;
